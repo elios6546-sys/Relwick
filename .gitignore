@@ -14,3 +14,9 @@ apps/web/test-results
 .DS_Store
 Thumbs.db
 *.tsbuildinfo
+
+# Journaux MySQL de XAMPP
+mysqld-*.txt
+
+# Skills tiers (restaurables depuis skills-lock.json)
+.claude/skills/

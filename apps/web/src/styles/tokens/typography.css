@@ -1,30 +1,51 @@
-/* Families from source. Scale is an addition (source defines none) — tuned for Instrument Sans. */
+/* Échelle de la Charte graphique Relwick v2 (p. 14–15).
+   Une seule famille, Instrument Sans, en trois graisses : 400 texte, 500 libellés, 600 titres.
+   JetBrains Mono pour le code et les identifiants techniques uniquement.
+   Neuf styles : display 56/60 · h1 40/46 · h2 30/36 · h3 22/28 · body-lg 18/28 · body 16/24
+   · small 14/20 · label 14/20 (500) · caption 12/16 (500). */
 :root{
 --font-sans:"Instrument Sans",ui-sans-serif,system-ui,sans-serif;
 --font-mono:"JetBrains Mono",ui-monospace,monospace;
 --fw-regular:400; /* @kind font */
 --fw-medium:500; /* @kind font */
 --fw-semibold:600; /* @kind font */
---fs-display:clamp(48px,7vw,88px); /* @kind font */
---fs-h1:clamp(36px,4.6vw,56px); /* @kind font */
---fs-h2:clamp(28px,3.2vw,40px); /* @kind font */
---fs-h3:24px; /* @kind font */
---fs-h4:19px; /* @kind font */
---fs-lead:20px; /* @kind font */
+/* Tailles : fixes au-dessus de 1024 px, réduites en douceur sur petit écran. */
+--fs-display:clamp(40px,4.4vw,56px); /* @kind font */
+--fs-h1:clamp(32px,3.4vw,40px); /* @kind font */
+--fs-h2:clamp(26px,2.6vw,30px); /* @kind font */
+--fs-h3:22px; /* @kind font */
+--fs-h4:18px; /* @kind font */
+--fs-lead:18px; /* @kind font — body-lg */
 --fs-body:16px; /* @kind font */
 --fs-small:14px; /* @kind font */
 --fs-caption:12px; /* @kind font */
---lh-tight:1.04; /* @kind font */
---lh-heading:1.15; /* @kind font */
---lh-body:1.55; /* @kind font */
---ls-display:-0.035em; /* @kind font */
+/* Interlignes (rapport taille/interligne de la charte). */
+--lh-display:1.07; /* 56/60 @kind font */
+--lh-h1:1.15; /* 40/46 @kind font */
+--lh-h2:1.2; /* 30/36 @kind font */
+--lh-h3:1.27; /* 22/28 @kind font */
+--lh-lead:1.56; /* 18/28 @kind font */
+--lh-body:1.5; /* 16/24 @kind font */
+--lh-small:1.43; /* 14/20 @kind font */
+--lh-caption:1.33; /* 12/16 @kind font */
+--lh-tight:var(--lh-display); /* @kind font */
+--lh-heading:var(--lh-h2); /* @kind font */
+/* Titres en 600 avec un interlettrage serré. */
+--ls-display:-0.025em; /* @kind font */
 --ls-heading:-0.02em; /* @kind font */
 --ls-body:0; /* @kind font */
 --ls-eyebrow:0.08em; /* @kind font */
---text-display:var(--fw-medium) var(--fs-display)/var(--lh-tight) var(--font-sans); /* @kind font */
---text-h1:var(--fw-medium) var(--fs-h1)/var(--lh-heading) var(--font-sans); /* @kind font */
---text-h2:var(--fw-medium) var(--fs-h2)/var(--lh-heading) var(--font-sans); /* @kind font */
---text-h3:var(--fw-semibold) var(--fs-h3)/1.25 var(--font-sans); /* @kind font */
+/* Raccourcis `font:` */
+--text-display:var(--fw-semibold) var(--fs-display)/var(--lh-display) var(--font-sans); /* @kind font */
+--text-h1:var(--fw-semibold) var(--fs-h1)/var(--lh-h1) var(--font-sans); /* @kind font */
+--text-h2:var(--fw-semibold) var(--fs-h2)/var(--lh-h2) var(--font-sans); /* @kind font */
+--text-h3:var(--fw-semibold) var(--fs-h3)/var(--lh-h3) var(--font-sans); /* @kind font */
+--text-body-lg:var(--fw-regular) var(--fs-lead)/var(--lh-lead) var(--font-sans); /* @kind font */
 --text-body:var(--fw-regular) var(--fs-body)/var(--lh-body) var(--font-sans); /* @kind font */
---text-code:var(--fw-regular) 14px/1.6 var(--font-mono); /* @kind font */
+--text-small:var(--fw-regular) var(--fs-small)/var(--lh-small) var(--font-sans); /* @kind font */
+--text-label:var(--fw-medium) var(--fs-small)/var(--lh-small) var(--font-sans); /* @kind font */
+--text-caption:var(--fw-medium) var(--fs-caption)/var(--lh-caption) var(--font-sans); /* @kind font */
+--text-code:var(--fw-regular) 14px/1.5 var(--font-mono); /* @kind font */
+/* Texte courant : 68 caractères par ligne au plus. */
+--measure:68ch; /* @kind font */
 }

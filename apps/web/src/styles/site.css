@@ -117,7 +117,7 @@ body {
 
 .site-nav a {
   padding: 8px 12px;
-  font: 500 15px var(--font-sans);
+  font: var(--text-label);
   color: var(--rw-text-muted);
   text-decoration: none;
   transition: color 160ms var(--ease-out);
@@ -152,7 +152,7 @@ body {
 
 .site-mobile-nav a:not(.rw-btn) {
   padding: 14px 0;
-  font: 500 18px var(--font-sans);
+  font: 500 var(--fs-lead) / var(--lh-lead) var(--font-sans);
   color: var(--rw-text);
   border-bottom: 1px solid var(--rw-line);
   text-decoration: none;
@@ -184,10 +184,41 @@ body {
   box-sizing: border-box;
 }
 
+/* Conteneur de la photo : il porte la parallaxe (propriété `translate`, posée en JS). */
 .hero-panel__media {
   position: absolute;
   inset: 0;
-  animation: hero-kenburns 2400ms var(--ease-out) backwards;
+  overflow: hidden;
+}
+
+.hero-panel__base,
+.hero-panel__sky,
+.hero-panel__sky-drift {
+  position: absolute;
+  inset: 0;
+}
+
+/* Photo de base : zoom d'entrée, puis respiration lente. */
+.hero-panel__base {
+  will-change: translate, scale;
+  animation:
+    hero-kenburns 2400ms var(--ease-out) backwards,
+    hero-base-drift 32s ease-in-out 2400ms infinite alternate;
+}
+
+/* Copie de la photo limitée au ciel par un masque : seuls les nuages dérivent. */
+.hero-panel__sky {
+  pointer-events: none;
+  -webkit-mask-image: linear-gradient(to bottom, #000 0%, #000 26%, transparent 50%);
+  mask-image: linear-gradient(to bottom, #000 0%, #000 26%, transparent 50%);
+  animation: hero-sky-in 2400ms var(--ease-out) backwards;
+}
+
+.hero-panel__sky-drift {
+  will-change: translate, scale;
+  translate: -3% 0;
+  scale: 1.12;
+  animation: hero-sky-drift 26s ease-in-out infinite alternate;
 }
 
 .hero-panel > .site-container {
@@ -196,37 +227,29 @@ body {
 
 .hero-panel__box {
   position: relative;
-  max-width: 760px;
+  max-width: 720px;
   color: var(--rw-text);
   border-radius: var(--radius-leaf) 0;
   padding: clamp(28px, 4.4vw, 56px) clamp(24px, 4.4vw, 56px) clamp(28px, 4vw, 48px);
 }
 
-/* Le verre est un calque à part : le texte reste net pendant son entrée. */
+/* Panneau Encre, en aplat (pas de flou, pas de reflet) : le texte reste net pendant son entrée. */
 .hero-panel__glass {
   position: absolute;
   inset: 0;
   border-radius: var(--radius-leaf) 0;
-  background: rgba(13, 17, 30, 0.32);
-  backdrop-filter: blur(8px) saturate(140%);
-  border: 1px solid rgba(249, 246, 241, 0.26);
-  box-shadow:
-    inset 0 1px 0 rgba(249, 246, 241, 0.38),
-    inset 1px 0 0 rgba(249, 246, 241, 0.14),
-    inset 0 -1px 0 rgba(249, 246, 241, 0.08),
-    0 24px 56px rgba(13, 17, 30, 0.22);
+  background: rgba(13, 17, 30, 0.78);
+  border: 1px solid rgba(249, 246, 241, 0.1);
+  box-shadow: 0 24px 56px rgba(13, 17, 30, 0.18);
   animation: hero-glass-in 1100ms var(--ease-out) backwards;
 }
 
 .hero-panel__content {
   position: relative;
-  text-shadow:
-    0 1px 2px rgba(13, 17, 30, 0.3),
-    0 2px 28px rgba(13, 17, 30, 0.35);
 }
 
 .hero-panel h1 {
-  font: 500 clamp(40px, 5.6vw, 76px) / 1.04 var(--font-sans);
+  font: var(--text-display);
   letter-spacing: var(--ls-display);
   margin: 0 0 24px;
   text-wrap: balance;
@@ -255,10 +278,10 @@ body {
 }
 
 .hero-lead {
-  font-size: var(--fs-lead);
-  line-height: 1.5;
+  font: var(--text-body-lg);
   margin: 0 0 32px;
-  max-width: 560px;
+  max-width: 540px;
+  color: var(--rw-text);
   text-wrap: pretty;
 }
 
@@ -275,7 +298,8 @@ body {
   align-items: center;
   gap: 8px;
   margin: 24px 0 0;
-  font-size: 14px;
+  font: var(--text-small);
+  color: var(--rw-text-muted);
 }
 
 .hero-note svg {
@@ -286,6 +310,32 @@ body {
 @keyframes hero-kenburns {
   from {
     scale: 1.1;
+  }
+}
+
+@keyframes hero-base-drift {
+  from {
+    scale: 1;
+  }
+  to {
+    scale: 1.06;
+  }
+}
+
+@keyframes hero-sky-in {
+  from {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-sky-drift {
+  from {
+    translate: -3% 0;
+    scale: 1.12;
+  }
+  to {
+    translate: 3% -1%;
+    scale: 1.16;
   }
 }
 
@@ -326,13 +376,14 @@ body {
 .site-section-head__aside {
   margin: 0;
   max-width: 420px;
+  font: var(--text-body);
   color: var(--rw-text-muted);
   text-wrap: pretty;
 }
 
 .site-eyebrow {
   display: inline-block;
-  font: 600 12px/1 var(--font-sans);
+  font: 600 var(--fs-caption) / var(--lh-caption) var(--font-sans);
   letter-spacing: var(--ls-eyebrow);
   text-transform: uppercase;
   color: var(--rw-copper-text);
@@ -344,6 +395,30 @@ body {
   letter-spacing: var(--ls-heading);
   margin: 0;
   text-wrap: balance;
+}
+
+/* Chapeau d'une section : body-lg. */
+.site-lead {
+  font: var(--text-body-lg);
+  margin: 0;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+.site-lead--muted {
+  color: var(--rw-text-muted);
+}
+
+/* Paragraphe courant : body, 68 caractères par ligne au plus. */
+.site-body {
+  font: var(--text-body);
+  margin: 0;
+  max-width: var(--measure);
+  text-wrap: pretty;
+}
+
+.site-body--muted {
+  color: var(--rw-text-muted);
 }
 
 /* —— Services —— */
@@ -395,18 +470,20 @@ body {
 }
 
 .svc-card__num {
-  font: 500 13px var(--font-mono);
+  font: var(--text-caption);
+  font-variant-numeric: tabular-nums;
   color: var(--rw-copper-text);
 }
 
 .svc-card h3 {
-  font: 600 20px/1.25 var(--font-sans);
-  letter-spacing: -0.01em;
+  font: var(--text-h3);
+  letter-spacing: var(--ls-heading);
   margin: 24px 0 8px;
 }
 
 .svc-card p {
   margin: 0 0 24px;
+  font: var(--text-body);
   color: var(--rw-text-muted);
   text-wrap: pretty;
 }
@@ -451,17 +528,6 @@ body {
   transition: scale var(--dur-slow) var(--ease-out);
 }
 
-.work__placeholder {
-  position: absolute;
-  inset: 0;
-  display: grid;
-  place-items: center;
-  padding: 16px;
-  text-align: center;
-  font-size: 14px;
-  color: var(--ink-600);
-}
-
 .work__meta {
   display: flex;
   justify-content: space-between;
@@ -470,13 +536,15 @@ body {
 }
 
 .work__meta h3 {
-  font: 600 17px/1.3 var(--font-sans);
+  font: var(--text-h3);
+  letter-spacing: var(--ls-heading);
   margin: 0;
+  text-wrap: balance;
 }
 
 .work__meta p {
   margin: 4px 0 0;
-  font-size: 14px;
+  font: var(--text-small);
   color: var(--rw-text-muted);
 }
 
@@ -515,6 +583,494 @@ body {
     opacity: 0;
     transform: translateY(16px) scale(0.98);
   }
+}
+
+/* —— Aperçus de projet dessinés en CSS ——
+   Un navigateur, un téléphone ou une fenêtre, posés sur l'aplat teinté de la carte,
+   coupés par le bas. Palette : neutres pour la structure, indigo pour l'action, cuivre en touche. */
+.pv {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding: 28px 28px 0;
+  overflow: hidden;
+}
+
+.pv-frame {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  min-height: 100%;
+  background: var(--rw-surface);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  box-shadow:
+    0 0 0 1px rgba(13, 17, 30, 0.06),
+    0 18px 40px rgba(13, 17, 30, 0.14);
+  overflow: hidden;
+}
+
+.pv-frame--phone {
+  width: 54%;
+  max-width: 200px;
+  border: 6px solid var(--ink-950);
+  border-bottom: 0;
+  border-radius: 28px 28px 0 0;
+}
+
+.pv-notch {
+  display: block;
+  width: 36%;
+  height: 4px;
+  margin: 8px auto 0;
+  border-radius: 2px;
+  background: var(--ink-950);
+}
+
+.pv-chrome {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  height: 24px;
+  padding: 0 10px;
+  background: var(--rw-surface-sunken);
+  border-bottom: 1px solid var(--rw-line);
+}
+
+.pv-dot {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--ink-300);
+}
+
+.pv-url {
+  flex: 1;
+  height: 10px;
+  margin-left: 8px;
+  border-radius: 5px;
+  background: var(--rw-surface);
+  border: 1px solid var(--rw-line);
+}
+
+.pv-body {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 12px;
+}
+
+.pv-body--tight {
+  padding: 8px;
+  gap: 8px;
+}
+
+.pv-stack {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 5px;
+}
+
+.pv-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pv-row--between {
+  justify-content: space-between;
+}
+
+.pv-row--tight {
+  gap: 4px;
+}
+
+.pv-ml-auto {
+  margin-left: auto;
+}
+
+/* Lignes de texte */
+.pv-line {
+  display: block;
+  height: 6px;
+  border-radius: 3px;
+  background: var(--ink-200);
+}
+
+.pv-line--tall {
+  height: 9px;
+}
+
+.pv-line--dark {
+  background: var(--ink-700);
+}
+
+.pv-line--ivory {
+  background: var(--ivory);
+}
+
+.pv-line--ivory-soft {
+  background: var(--ink-400);
+}
+
+.pv-line--sidebar {
+  background: var(--ink-700);
+}
+
+.pv-line--sidebar-active {
+  background: var(--indigo-400);
+}
+
+.pv-line--w10 {
+  width: 10%;
+}
+
+.pv-line--w20 {
+  width: 20%;
+}
+
+.pv-line--w30 {
+  width: 30%;
+}
+
+.pv-line--w40 {
+  width: 40%;
+}
+
+.pv-line--w50 {
+  width: 50%;
+}
+
+.pv-line--w60 {
+  width: 60%;
+}
+
+.pv-line--w70 {
+  width: 70%;
+}
+
+.pv-line--w80 {
+  width: 80%;
+}
+
+/* Boutons et pastilles */
+.pv-btn {
+  display: block;
+  flex: none;
+  width: 56px;
+  height: 16px;
+  border-radius: 4px;
+  background: var(--rw-primary);
+}
+
+.pv-btn--sm {
+  width: 40px;
+  height: 12px;
+}
+
+.pv-btn--block {
+  width: 100%;
+  height: 22px;
+  border-radius: 6px;
+}
+
+.pv-pill {
+  display: block;
+  flex: none;
+  width: 30px;
+  height: 12px;
+  border-radius: 6px;
+  background: var(--indigo-100);
+}
+
+.pv-pill--copper {
+  background: var(--copper-100);
+}
+
+.pv-status {
+  display: block;
+  width: 60%;
+  height: 10px;
+  border-radius: 5px;
+  background: var(--malachite-100);
+}
+
+.pv-status--warn {
+  background: var(--amber-100);
+}
+
+/* Teintes des photos */
+.pv-tone-copper {
+  background: var(--copper-200);
+}
+
+.pv-tone-copper-2 {
+  background: var(--copper-300);
+}
+
+.pv-tone-copper-deep {
+  background: var(--copper-500);
+}
+
+.pv-tone-indigo {
+  background: var(--indigo-200);
+}
+
+.pv-tone-ink {
+  background: var(--ink-200);
+}
+
+.pv-tone-ink-mid {
+  background: var(--ink-400);
+}
+
+.pv-tone-ink-deep {
+  background: var(--ink-800);
+}
+
+.pv-thumb {
+  flex: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+}
+
+.pv-avatar {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: var(--ink-200);
+}
+
+.pv-photo {
+  display: block;
+  border-radius: 6px;
+  min-height: 34px;
+}
+
+/* 1 · Restaurant */
+.pv-banner {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 6px;
+  height: 58px;
+  padding: 0 12px;
+  border-radius: 6px;
+  background: var(--ink-950);
+}
+
+.pv-banner .pv-btn--sm {
+  margin-top: 2px;
+}
+
+/* 2 · Livraison */
+.pv-map {
+  position: relative;
+  height: 96px;
+  border-radius: 8px;
+  background: var(--rw-surface-sunken);
+  overflow: hidden;
+}
+
+.pv-route {
+  position: absolute;
+  left: 22%;
+  top: 20%;
+  width: 50%;
+  height: 56%;
+  border: 2px dashed var(--rw-primary);
+  border-top-color: transparent;
+  border-right-color: transparent;
+  border-radius: 0 0 0 14px;
+}
+
+.pv-pin {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--rw-primary);
+  box-shadow: 0 0 0 3px var(--indigo-100);
+}
+
+.pv-pin--start {
+  left: calc(22% - 5px);
+  top: calc(20% - 5px);
+}
+
+.pv-pin--end {
+  left: calc(72% - 5px);
+  top: calc(76% - 5px);
+  background: var(--copper-500);
+  box-shadow: 0 0 0 3px var(--copper-100);
+}
+
+.pv-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 8px;
+  background: var(--rw-surface);
+  border: 1px solid var(--rw-line);
+}
+
+.pv-progress {
+  display: block;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--ink-100);
+  overflow: hidden;
+}
+
+.pv-progress__bar {
+  display: block;
+  width: 62%;
+  height: 100%;
+  background: var(--rw-primary);
+}
+
+/* 3 · Gestion de stock */
+.pv-window {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+.pv-sidebar {
+  display: flex;
+  flex: none;
+  flex-direction: column;
+  gap: 9px;
+  width: 26%;
+  padding: 12px 10px;
+  background: var(--ink-950);
+}
+
+.pv-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 10px;
+  padding: 10px;
+  min-width: 0;
+}
+
+.pv-kpis {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.pv-kpi {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 8px;
+  border-radius: 6px;
+  background: var(--rw-surface-sunken);
+}
+
+.pv-table {
+  display: flex;
+  flex-direction: column;
+  border: 1px solid var(--rw-line);
+  border-radius: 6px;
+  overflow: hidden;
+}
+
+.pv-tr {
+  display: grid;
+  grid-template-columns: 2fr 1.4fr 1fr 1fr;
+  align-items: center;
+  gap: 8px;
+  height: 18px;
+  padding: 0 8px;
+}
+
+.pv-tr:nth-child(odd):not(.pv-tr--head) {
+  background: var(--rw-surface-sunken);
+}
+
+.pv-tr--head {
+  background: var(--ink-100);
+}
+
+/* 4 · Boutique */
+.pv-nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding-bottom: 8px;
+  border-bottom: 1px solid var(--rw-line);
+}
+
+.pv-products {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 10px;
+}
+
+.pv-product {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pv-product .pv-photo {
+  height: 44px;
+}
+
+/* 5 · Rendez-vous */
+.pv-calendar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: 5px;
+}
+
+.pv-day {
+  display: block;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: var(--ink-100);
+}
+
+.pv-day--soft {
+  background: var(--indigo-100);
+}
+
+.pv-day--selected {
+  background: var(--rw-primary);
+}
+
+.pv-slot {
+  display: block;
+  flex: 1;
+  height: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--rw-line-strong);
+}
+
+.pv-slot--active {
+  border-color: var(--rw-primary);
+  background: var(--indigo-100);
+}
+
+/* 6 · Portfolio */
+.pv-gallery {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 38px;
+  gap: 6px;
+}
+
+.pv-span-2 {
+  grid-row: span 2;
 }
 
 /* Onglets : défilement horizontal si la largeur manque. */
@@ -587,8 +1143,66 @@ body {
   aspect-ratio: 4 / 5;
   border-radius: var(--radius-leaf) 0;
   overflow: hidden;
-  background: var(--indigo-100);
+  background: var(--ink-950);
   animation: apropos-float-front 6400ms var(--ease-in-out) infinite alternate;
+}
+
+.apropos-visual__img {
+  opacity: 0;
+  transition: opacity var(--dur-slow) var(--ease-out);
+}
+
+.apropos-visual__img[data-loaded="true"] {
+  opacity: 1;
+}
+
+/* Carte de marque : Encre, symbole sur fond sombre, filet cuivre 40 × 4 (charte p. 16). */
+.apropos-card {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: clamp(24px, 6%, 36px);
+  color: var(--ivory);
+}
+
+.apropos-card__symbol {
+  display: block;
+  width: clamp(40px, 12%, 56px);
+  height: auto;
+}
+
+.apropos-card__footer {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.apropos-card__rule {
+  display: block;
+  width: 40px;
+  height: 4px;
+  margin-bottom: 16px;
+  background: var(--copper-400);
+}
+
+.apropos-card__name {
+  margin: 0;
+  font: var(--text-h3);
+  letter-spacing: var(--ls-heading);
+}
+
+.apropos-card__role {
+  margin: 0;
+  font: var(--text-body);
+  color: var(--ink-300);
+}
+
+.apropos-card__place {
+  margin: 12px 0 0;
+  font: var(--text-small);
+  color: var(--ink-400);
 }
 
 @keyframes apropos-float-back {
@@ -614,15 +1228,15 @@ body {
 .apropos-facts dt {
   padding: 14px 32px 14px 0;
   border-bottom: 1px solid var(--rw-line);
-  font-size: 14px;
+  font: var(--text-small);
   color: var(--rw-text-muted);
 }
 
 .apropos-facts dd {
   margin: 0;
-  padding: 14px 0;
+  padding: 12px 0;
   border-bottom: 1px solid var(--rw-line);
-  font-weight: 500;
+  font: 500 var(--fs-body) / var(--lh-body) var(--font-sans);
 }
 
 .contact-form {
@@ -672,12 +1286,12 @@ body {
   display: flex;
   flex-direction: column;
   gap: 10px;
-  font-size: 15px;
+  font: var(--text-small);
   color: var(--rw-text-muted);
 }
 
 .footer-col h4 {
-  font: 600 13px var(--font-sans);
+  font: var(--text-label);
   color: var(--rw-text);
   margin: 0 0 4px;
 }
@@ -696,7 +1310,7 @@ body {
   justify-content: space-between;
   gap: 12px 24px;
   padding-top: 24px;
-  font-size: 14px;
+  font: var(--text-small);
   color: var(--rw-text-muted);
 }
 
@@ -716,6 +1330,26 @@ body {
 .legal-page {
   padding: 48px 0 72px;
   max-width: 760px;
+}
+
+.legal-page__title {
+  font: var(--text-h1);
+  letter-spacing: var(--ls-heading);
+  margin: 0 0 12px;
+  text-wrap: balance;
+}
+
+.legal-page__h2 {
+  font: var(--text-h3);
+  letter-spacing: var(--ls-heading);
+  margin: 0 0 8px;
+}
+
+.legal-page p,
+.legal-page li {
+  font: var(--text-body);
+  max-width: var(--measure);
+  text-wrap: pretty;
 }
 
 @media (min-width: 860px) {
@@ -771,8 +1405,256 @@ body {
   }
 }
 
+/* ——————————————————————————————————————————————
+   Adaptations petits écrans, tactile et paysage
+   —————————————————————————————————————————————— */
+
+/* Le rythme vertical se resserre progressivement sous 960 px. */
+.site-section-pad-lg {
+  padding-block: clamp(64px, 10vw, 96px) 48px;
+}
+
+.site-section-pad-contact {
+  padding-block: clamp(56px, 7.5vw, 72px) clamp(64px, 10vw, 96px);
+}
+
+/* Menu mobile : reste défilable quand l'écran est bas (téléphone en paysage). */
+.site-mobile-nav {
+  max-height: calc(100dvh - 72px);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.site-mobile-nav .rw-btn {
+  flex: 1;
+}
+
+/* Les notifications passent au-dessus du bouton WhatsApp au lieu de le recouvrir. */
+.rw-toast-stack {
+  position: fixed;
+  right: 16px;
+  bottom: 16px;
+  left: 16px;
+  z-index: 120;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 12px;
+  pointer-events: none;
+}
+
+.rw-toast-stack .rw-toast {
+  min-width: min(300px, 100%);
+  pointer-events: auto;
+}
+
+body:has(.whatsapp-float) .rw-toast-stack {
+  bottom: 88px;
+}
+
+@media (max-width: 639px) {
+  /* Hero : le panneau et ses boutons tiennent dans la hauteur d'un téléphone. */
+  .hero-panel {
+    min-height: calc(100svh - 72px);
+    padding-top: clamp(96px, 22svh, 180px);
+  }
+
+  .hero-panel__box {
+    padding: 24px 20px;
+    border-radius: 24px 0;
+  }
+
+  .hero-panel__glass {
+    border-radius: 24px 0;
+  }
+
+  .hero-panel h1 {
+    font-size: clamp(32px, 10vw, 40px);
+    line-height: var(--lh-h1);
+    margin-bottom: 16px;
+  }
+
+  .hero-lead {
+    margin-bottom: 24px;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .hero-note {
+    margin-top: 20px;
+    align-items: flex-start;
+  }
+
+  .hero-note svg {
+    margin-top: 3px;
+  }
+
+  /* En une colonne, les cartes prennent la hauteur de leur contenu. */
+  .svc-card {
+    min-height: 0;
+    padding: 24px;
+  }
+
+  .site-section-head {
+    margin-bottom: 32px;
+  }
+
+  /* Onglets sur toute la largeur, défilement horizontal si besoin. */
+  .site-tabs-wrap {
+    display: flex;
+    width: 100%;
+  }
+
+  .site-tabs-wrap .rw-tabs--pill {
+    flex: 1 0 auto;
+  }
+
+  .site-tabs-wrap .rw-tab {
+    flex: 1 0 auto;
+  }
+
+  .apropos-visual {
+    max-width: 340px;
+  }
+
+  .apropos-visual__frame {
+    padding: 0 20px 20px 0;
+  }
+
+  .apropos-visual__back {
+    left: 20px;
+    top: 20px;
+  }
+
+  /* Les deux boutons d'une même rangée se partagent la largeur. */
+  .site-cta-row .rw-btn {
+    flex: 1 1 100%;
+  }
+
+  .apropos-facts dt {
+    padding-right: 20px;
+  }
+
+  .contact-form .rw-btn--lg {
+    width: 100%;
+  }
+
+  /* Footer : colonnes de liens en grille 2 × 2. */
+  .footer-cols {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 32px 24px;
+    width: 100%;
+  }
+
+  .footer-col {
+    overflow-wrap: anywhere;
+  }
+
+  .rw-dialog {
+    padding: 24px 20px;
+  }
+
+  .rw-dialog__actions {
+    flex-wrap: wrap;
+  }
+
+  .rw-dialog__actions .rw-btn {
+    flex: 1 1 auto;
+  }
+}
+
+/* Téléphone en paysage : le hero ne dépasse plus la hauteur de l'écran de plusieurs fois. */
+@media (max-height: 560px) and (orientation: landscape) {
+  .hero-panel {
+    min-height: 0;
+    padding-top: 96px;
+  }
+
+  .hero-panel__box {
+    padding-block: 24px;
+  }
+
+  .hero-panel h1 {
+    font-size: clamp(32px, 5.6vw, 48px);
+    line-height: var(--lh-h1);
+    margin-bottom: 16px;
+  }
+
+  .hero-lead {
+    margin-bottom: 20px;
+  }
+}
+
+/* Écrans tactiles : zones de toucher plus hautes, et pas de zoom automatique d'iOS
+   sur les champs (déclenché sous 16 px). */
+@media (pointer: coarse) {
+  .rw-input {
+    font-size: 16px;
+    min-height: 44px;
+  }
+
+  .rw-tag--selectable {
+    height: 40px;
+    padding: 0 16px;
+    font-size: 14px;
+  }
+
+  .rw-check {
+    min-height: 32px;
+  }
+
+  .contact-link,
+  .footer-col a,
+  .footer-bottom__links a {
+    display: inline-block;
+    padding-block: 6px;
+  }
+
+  .footer-col {
+    gap: 2px;
+  }
+
+  .footer-col h4 {
+    margin-bottom: 8px;
+  }
+}
+
+/* Le survol n'existe pas au doigt : on évite les cartes qui restent « levées » après un toucher. */
+@media (hover: none) {
+  .rw-card--interactive:hover {
+    transform: none;
+    box-shadow: none;
+    border-color: var(--rw-line);
+  }
+
+  .svc-card:hover .svc-card__icon {
+    transform: none;
+  }
+
+  .work:hover .work__img {
+    border-radius: var(--radius-md);
+  }
+
+  .work:hover .work__zoom {
+    scale: 1;
+  }
+
+  .work:hover .work__go {
+    translate: none;
+    color: var(--rw-text-muted);
+  }
+}
+
 @media (prefers-reduced-motion: reduce) {
-  .hero-panel__media,
+  .hero-panel__sky {
+    display: none;
+  }
+
+  .hero-panel__base,
   .hero-panel__glass,
   .hero-word__inner,
   .hero-fade,

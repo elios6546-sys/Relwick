@@ -194,7 +194,7 @@
 
 .dash-header__title {
   margin: 0;
-  font: 500 24px/1.2 var(--font-sans);
+  font: 600 24px/1.2 var(--font-sans);
   letter-spacing: -0.02em;
   color: var(--rw-text);
 }
@@ -322,8 +322,16 @@
 }
 
 .dash-kpi__value {
-  font: 500 32px/1.1 var(--font-sans);
+  font: 600 32px/1.1 var(--font-sans);
   letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+}
+
+/* Chiffres tabulaires dans les tableaux et les montants (charte p. 15). */
+.dash-table,
+.dash-card__big,
+.dash-progress__value {
+  font-variant-numeric: tabular-nums;
 }
 
 .dash-kpi__foot {
@@ -1093,6 +1101,117 @@
   /* L’en-tête devient trop haut pour rester collé sur un petit écran. */
   .dash-header {
     position: static;
+  }
+
+  /* En-tête compact : logo, statut et thème sur une ligne, titre, puis période + export. */
+  .dash-header__inner {
+    gap: 12px;
+    padding-block: 12px;
+    min-height: 0;
+  }
+
+  .dash-header__actions {
+    display: contents;
+  }
+
+  .dash-header__logo {
+    order: 1;
+    flex: none;
+    margin-right: auto;
+  }
+
+  .dash-header__actions > .rw-badge {
+    order: 2;
+  }
+
+  .dash-header__actions > .rw-btn--icon {
+    order: 3;
+  }
+
+  .dash-header__titles {
+    order: 4;
+    flex: 1 1 100%;
+  }
+
+  .dash-periods {
+    order: 5;
+    flex: 1 1 0;
+    min-width: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+
+  .dash-periods .rw-tabs--pill {
+    display: flex;
+    min-width: max-content;
+  }
+
+  .dash-periods .rw-tab {
+    flex: 1 0 auto;
+  }
+
+  /* « Exporter » réduit à son icône (le libellé reste lu par les lecteurs d'écran). */
+  .dash-header__actions > .rw-btn--secondary {
+    order: 6;
+    width: 42px;
+    height: 42px;
+    padding: 0;
+    gap: 0;
+    font-size: 0;
+  }
+
+  .dash-card,
+  .dash-kpi {
+    padding: 16px;
+  }
+
+  .dash-tablecard__head {
+    padding: 16px;
+  }
+
+  .dash-table__head,
+  .dash-table__row,
+  .dash-table__foot {
+    padding-inline: 16px;
+  }
+
+  .dash-drawer {
+    border-radius: 0;
+  }
+
+  .dash-drawer__head,
+  .dash-drawer__body {
+    padding-inline: 16px;
+  }
+
+  /* Graphique : étiquettes moins serrées quand il y a beaucoup de barres. */
+  .dash-chart {
+    height: 200px;
+  }
+}
+
+/* Tablette : la barre d'actions passe sous le titre sans s'étirer. */
+@media (min-width: 640px) and (max-width: 959px) {
+  .dash-header__inner {
+    gap: 12px 24px;
+  }
+}
+
+/* Écran bas (téléphone en paysage) : l'en-tête ne reste pas collé. */
+@media (max-height: 560px) {
+  .dash-header {
+    position: static;
+  }
+}
+
+/* Tactile : cibles plus hautes dans la navigation et les tableaux. */
+@media (pointer: coarse) {
+  .dash-subnav .dash-navbtn {
+    height: 44px;
+  }
+
+  .dash-table__row {
+    padding-block: 14px;
   }
 }
 

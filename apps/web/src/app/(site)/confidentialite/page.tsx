@@ -9,11 +9,11 @@ export const metadata = {
 export default function ConfidentialitePage() {
   return (
     <main className="site-container legal-page">
-      <h1 style={{ font: "var(--text-h2)", letterSpacing: "var(--ls-heading)" }}>Politique de confidentialité</h1>
-      <p style={{ color: "var(--rw-text-muted)" }}>Dernière mise à jour : octobre 2026</p>
+      <h1 className="legal-page__title">Politique de confidentialité</h1>
+      <p className="site-body site-body--muted">Dernière mise à jour : octobre 2026</p>
 
       <section style={{ marginTop: 32 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Responsable du traitement</h2>
+        <h2 className="legal-page__h2">Responsable du traitement</h2>
         <p>
           Relwick, Elios Ngombe, Kolwezi, République démocratique du Congo —{" "}
           <a href="mailto:elios6546@gmail.com">elios6546@gmail.com</a>.
@@ -21,7 +21,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section style={{ marginTop: 24 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Mesure d&apos;audience</h2>
+        <h2 className="legal-page__h2">Mesure d&apos;audience</h2>
         <p>
           Nous mesurons l&apos;utilisation de ce site pour l&apos;améliorer. Les données suivantes
           peuvent être enregistrées pour chaque visite :
@@ -43,7 +43,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section style={{ marginTop: 24 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Formulaire « Réserver un appel »</h2>
+        <h2 className="legal-page__h2">Formulaire « Réserver un appel »</h2>
         <p>
           Les coordonnées que vous envoyez (nom, téléphone, e-mail facultatif, type de projet,
           créneau, message) sont utilisées uniquement pour vous recontacter au sujet de votre
@@ -52,7 +52,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section style={{ marginTop: 24 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Finalités et conservation</h2>
+        <h2 className="legal-page__h2">Finalités et conservation</h2>
         <p>
           Finalités : comprendre l&apos;utilisation du site, améliorer nos services et suivre les
           demandes reçues. Durée : détail des visites conservé environ 13 mois (395 jours, réglable) ;
@@ -61,7 +61,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section style={{ marginTop: 24 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Partage et hébergement</h2>
+        <h2 className="legal-page__h2">Partage et hébergement</h2>
         <p>
           Aucune revente ni partage de ces données à des tiers à des fins commerciales. Les données
           sont hébergées sur l&apos;infrastructure choisie pour faire tourner le site et l&apos;API
@@ -70,7 +70,7 @@ export default function ConfidentialitePage() {
       </section>
 
       <section style={{ marginTop: 24 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Vos droits</h2>
+        <h2 className="legal-page__h2">Vos droits</h2>
         <p>
           Vous pouvez demander l&apos;accès, la rectification ou la suppression de vos données en
           écrivant à <a href="mailto:elios6546@gmail.com">elios6546@gmail.com</a>.

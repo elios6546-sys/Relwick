@@ -6,6 +6,7 @@ import { useState } from "react";
 import { EventType } from "@relwick/shared";
 import { Tabs } from "@/components/ui/tabs";
 import { Tag } from "@/components/ui/badge";
+import { ProjectPreview } from "@/components/site/project-preview";
 import { REALISATIONS, type RealisationCategory } from "@/content/realisations";
 import { track } from "@/lib/tracker";
 
@@ -99,7 +100,7 @@ function ProjectVisual({ item }: { item: (typeof REALISATIONS)[number] }) {
             style={{ objectFit: "cover" }}
           />
         ) : (
-          <div className="work__placeholder">Capture d’écran du projet</div>
+          <ProjectPreview item={item} />
         )}
       </div>
     </div>

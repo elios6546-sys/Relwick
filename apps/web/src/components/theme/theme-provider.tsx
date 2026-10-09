@@ -4,9 +4,8 @@ import {
   createContext,
   useCallback,
   useContext,
-  useEffect,
   useMemo,
-  useState,
+  useSyncExternalStore,
 } from "react";
 import { EventType } from "@relwick/shared";
 import { track } from "@/lib/tracker";
@@ -27,12 +26,19 @@ function readTheme(): Theme {
   return attr === "dark" ? "dark" : "light";
 }
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setThemeState] = useState<Theme>("light");
+// Le thème vit sur <html data-theme> (posé avant l'hydratation par ThemeScript) :
+// on s'y abonne au lieu de le recopier dans un état React.
+function subscribeTheme(onChange: () => void) {
+  const observer = new MutationObserver(onChange);
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ["data-theme"],
+  });
+  return () => observer.disconnect();
+}
 
-  useEffect(() => {
-    setThemeState(readTheme());
-  }, []);
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  const theme = useSyncExternalStore<Theme>(subscribeTheme, readTheme, () => "light");
 
   const apply = useCallback((t: Theme) => {
     document.documentElement.setAttribute("data-theme", t);
@@ -41,7 +47,6 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     } catch {
       /* ignore */
     }
-    setThemeState(t);
   }, []);
 
   const setTheme = useCallback(

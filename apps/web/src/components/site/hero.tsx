@@ -5,6 +5,7 @@ import Image from "next/image";
 import { useEffect, useRef } from "react";
 import { Button } from "@/components/ui/button";
 
+const HERO_SRC = "/images/hero-montagnes.jpg";
 const WORDS = ["Votre", "site,", "vos", "applications."];
 const ACCENT = ["Bien", "faits."];
 
@@ -44,14 +45,29 @@ export function Hero() {
   return (
     <section id="accueil" data-section="hero" className="hero-panel site-section">
       <div ref={mediaRef} className="hero-panel__media">
-        <Image
-          src="/images/hero-montagnes.jpg"
-          alt=""
-          fill
-          priority
-          sizes="100vw"
-          style={{ objectFit: "cover", objectPosition: "center 42%" }}
-        />
+        <div className="hero-panel__base">
+          <Image
+            src={HERO_SRC}
+            alt=""
+            fill
+            priority
+            sizes="100vw"
+            style={{ objectFit: "cover", objectPosition: "center 42%" }}
+          />
+        </div>
+        {/* Même photo, masquée pour ne garder que le ciel : les nuages dérivent au-dessus des montagnes. */}
+        <div className="hero-panel__sky" aria-hidden="true">
+          <div className="hero-panel__sky-drift">
+            <Image
+              src={HERO_SRC}
+              alt=""
+              fill
+              priority={false}
+              sizes="100vw"
+              style={{ objectFit: "cover", objectPosition: "center 42%" }}
+            />
+          </div>
+        </div>
       </div>
       <div className="site-container">
         <div className="hero-panel__box" data-theme="dark">

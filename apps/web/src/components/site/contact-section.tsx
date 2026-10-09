@@ -163,16 +163,7 @@ export function ContactSection() {
           <h2 className="site-h2" style={{ marginBottom: 16 }}>
             Parlons de <span style={{ color: "var(--rw-primary)" }}>votre projet.</span>
           </h2>
-          <p
-            style={{
-              fontSize: "var(--fs-lead)",
-              lineHeight: 1.5,
-              color: "var(--rw-text-muted)",
-              margin: "0 0 40px",
-              maxWidth: 500,
-              textWrap: "pretty",
-            }}
-          >
+          <p className="site-lead site-lead--muted" style={{ marginBottom: 40, maxWidth: 500 }}>
             Laissez vos coordonnées : nous vous rappelons pour un premier échange de 30 minutes,
             gratuit et sans engagement.
           </p>
@@ -245,7 +236,7 @@ export function ContactSection() {
           <fieldset style={{ border: 0, padding: 0, margin: 0 }}>
             <legend
               style={{
-                font: "500 14px/1.3 var(--font-sans)",
+                font: "var(--text-label)",
                 color: "var(--rw-text)",
                 marginBottom: 10,
               }}
@@ -301,7 +292,7 @@ export function ContactSection() {
             >
               Réserver l&apos;appel
             </Button>
-            <span style={{ fontSize: 14, color: "var(--rw-text-muted)" }}>
+            <span style={{ font: "var(--text-small)", color: "var(--rw-text-muted)" }}>
               Appel gratuit, sans engagement.
             </span>
           </div>
@@ -369,13 +360,25 @@ function ContactCard() {
           EN
         </span>
         <div>
-          <div style={{ font: "600 17px/1.3 var(--font-sans)" }}>Elios Ngombe</div>
-          <div style={{ fontSize: 14, color: "var(--rw-text-muted)", marginTop: 2 }}>
+          <div style={{ font: "var(--text-h3)", letterSpacing: "var(--ls-heading)" }}>
+            Elios Ngombe
+          </div>
+          <div style={{ font: "var(--text-small)", color: "var(--rw-text-muted)", marginTop: 2 }}>
             Développeur professionnel, votre interlocuteur du premier appel à la mise en ligne
           </div>
         </div>
       </div>
-      <ul style={{ listStyle: "none", padding: 0, margin: 0, display: "flex", flexDirection: "column", gap: 14 }}>
+      <ul
+        style={{
+          listStyle: "none",
+          padding: 0,
+          margin: 0,
+          display: "flex",
+          flexDirection: "column",
+          gap: 14,
+          font: "var(--text-body)",
+        }}
+      >
         <li style={{ display: "flex", gap: 12, alignItems: "center" }}>
           <Mail size={20} style={{ color: "var(--rw-primary)" }} />
           <a className="contact-link" href="mailto:elios6546@gmail.com" data-track="contact_email">

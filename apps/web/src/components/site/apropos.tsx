@@ -11,8 +11,12 @@ const FACTS = [
   ["Plateformes", "Web, Android, iOS, Windows, macOS, Linux"],
 ] as const;
 
+const PHOTO_SRC = "/images/elios.webp";
+
 export function APropos() {
-  const [hasPhoto, setHasPhoto] = useState(false);
+  // La carte de marque reste visible tant que la photo n'est pas chargée ; si le fichier
+  // n'existe pas encore, elle tient lieu de visuel.
+  const [photo, setPhoto] = useState<"pending" | "ok" | "missing">("pending");
 
   return (
     <section
@@ -27,13 +31,31 @@ export function APropos() {
               <span className="apropos-visual__spark" />
             </div>
             <div className="apropos-visual__photo">
-              {hasPhoto ? (
+              <div className="apropos-card" aria-hidden={photo === "ok"}>
                 <Image
-                  src="/images/elios.webp"
+                  src="/brand/relwick-symbol-on-dark.svg"
+                  alt=""
+                  width={56}
+                  height={72}
+                  className="apropos-card__symbol"
+                />
+                <div className="apropos-card__footer">
+                  <span className="apropos-card__rule" />
+                  <p className="apropos-card__name">Elios Ngombe</p>
+                  <p className="apropos-card__role">Fondateur et développeur</p>
+                  <p className="apropos-card__place">Kolwezi · République démocratique du Congo</p>
+                </div>
+              </div>
+              {photo !== "missing" ? (
+                <Image
+                  src={PHOTO_SRC}
                   alt="Elios Ngombe"
                   fill
-                  sizes="460px"
-                  onError={() => setHasPhoto(false)}
+                  sizes="(max-width: 639px) 340px, 460px"
+                  onLoad={() => setPhoto("ok")}
+                  onError={() => setPhoto("missing")}
+                  className="apropos-visual__img"
+                  data-loaded={photo === "ok"}
                   style={{ objectFit: "cover" }}
                 />
               ) : null}
@@ -47,28 +69,11 @@ export function APropos() {
           <h2 className="site-h2" data-rv="80" style={{ marginBottom: 20 }}>
             Derrière Relwick, <span style={{ color: "var(--rw-primary)" }}>Elios Ngombe.</span>
           </h2>
-          <p
-            data-rv="160"
-            style={{
-              fontSize: "var(--fs-lead)",
-              lineHeight: 1.5,
-              margin: "0 0 16px",
-              maxWidth: 560,
-              textWrap: "pretty",
-            }}
-          >
+          <p className="site-lead" data-rv="160" style={{ marginBottom: 16, maxWidth: 560 }}>
             Développeur professionnel basé à Kolwezi, je conçois et développe moi-même chaque
             projet : sites web, applications Android et iOS, logiciels PC.
           </p>
-          <p
-            data-rv="220"
-            style={{
-              margin: "0 0 32px",
-              maxWidth: 560,
-              color: "var(--rw-text-muted)",
-              textWrap: "pretty",
-            }}
-          >
+          <p className="site-body site-body--muted" data-rv="220" style={{ marginBottom: 32, maxWidth: 560 }}>
             Vous échangez directement avec la personne qui écrit le code, du premier appel à la mise
             en ligne.
           </p>
@@ -80,7 +85,7 @@ export function APropos() {
               </div>
             ))}
           </dl>
-          <div data-rv="340" style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
+          <div className="site-cta-row" data-rv="340" style={{ display: "flex", flexWrap: "wrap", gap: 12 }}>
             <Button size="lg" arrow href="#contact" data-track="apropos_cta_appel" data-track-cta>
               Réserver un appel
             </Button>

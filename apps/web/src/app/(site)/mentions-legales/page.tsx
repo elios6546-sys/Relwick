@@ -9,10 +9,10 @@ export const metadata = {
 export default function MentionsLegalesPage() {
   return (
     <main className="site-container legal-page">
-      <h1 style={{ font: "var(--text-h2)", letterSpacing: "var(--ls-heading)" }}>Mentions légales</h1>
+      <h1 className="legal-page__title">Mentions légales</h1>
 
       <section style={{ marginTop: 32 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Éditeur du site</h2>
+        <h2 className="legal-page__h2">Éditeur du site</h2>
         <p>
           Relwick — Elios Ngombe, développeur professionnel<br />
           Kolwezi, République démocratique du Congo<br />
@@ -22,7 +22,7 @@ export default function MentionsLegalesPage() {
       </section>
 
       <section style={{ marginTop: 24 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Hébergeur</h2>
+        <h2 className="legal-page__h2">Hébergeur</h2>
         <p>
           Hébergeur de production à compléter lors du choix de l&apos;infogéreur (nom, adresse,
           contact).
@@ -30,7 +30,7 @@ export default function MentionsLegalesPage() {
       </section>
 
       <section style={{ marginTop: 24 }}>
-        <h2 style={{ font: "600 20px var(--font-sans)" }}>Propriété intellectuelle</h2>
+        <h2 className="legal-page__h2">Propriété intellectuelle</h2>
         <p>
           L&apos;ensemble des éléments graphiques, textes et codes de ce site sont la propriété de
           Relwick ou de ses partenaires, sauf mention contraire. Toute reproduction non autorisée est

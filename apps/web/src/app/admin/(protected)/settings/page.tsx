@@ -59,7 +59,7 @@ export default function AdminSettingsPage() {
 
   return (
     <AdminShell title="Paramètres">
-      <div style={{ display: "grid", gap: 16, maxWidth: 720 }}>
+      <div style={{ display: "grid", gridTemplateColumns: "minmax(0, 1fr)", gap: 16, maxWidth: 720 }}>
         <section className="rw-card">
           <h2 style={{ marginTop: 0, font: "600 16px var(--font-sans)" }}>Mot de passe</h2>
           <Field label="Mot de passe actuel">
@@ -82,8 +82,13 @@ export default function AdminSettingsPage() {
               </li>
             ))}
           </ul>
-          <div style={{ display: "flex", gap: 8, marginTop: 12 }}>
-            <Input value={newIp} onChange={(e) => setNewIp(e.target.value)} placeholder="IP ou CIDR" />
+          <div style={{ display: "flex", flexWrap: "wrap", gap: 8, marginTop: 12 }}>
+            <Input
+              value={newIp}
+              onChange={(e) => setNewIp(e.target.value)}
+              placeholder="IP ou CIDR"
+              style={{ flex: "1 1 180px", width: "auto" }}
+            />
             <Button
               variant="secondary"
               onClick={() => {

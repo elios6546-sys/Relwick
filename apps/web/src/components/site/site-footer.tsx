@@ -16,7 +16,7 @@ export function SiteFooter() {
               height={32}
               style={{ height: 32, width: "auto", display: "block" }}
             />
-            <p style={{ margin: "16px 0 0", color: "var(--rw-text-muted)", textWrap: "pretty" }}>
+            <p className="site-body site-body--muted" style={{ marginTop: 16 }}>
               Agence de création de sites web et d’applications Android, iOS et PC, basée à
               Kolwezi.
             </p>
