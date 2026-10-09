@@ -1,0 +1,298 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+enum DeviceType {
+  DESKTOP
+  MOBILE
+  TABLET
+  UNKNOWN
+}
+
+enum SourceCategory {
+  DIRECT
+  SEARCH
+  SOCIAL
+  WHATSAPP
+  REFERRAL
+  CAMPAIGN
+}
+
+enum EventType {
+  PAGEVIEW
+  CLICK
+  CTA_CLICK
+  CONTACT_CLICK
+  OUTBOUND_CLICK
+  SECTION_VIEW
+  SCROLL_DEPTH
+  FORM_START
+  FORM_ERROR
+  FORM_SUBMIT
+  FILTER_CHANGE
+  THEME_TOGGLE
+  MENU_TOGGLE
+}
+
+enum LeadStatus {
+  NEW
+  CONTACTED
+  CALL_SCHEDULED
+  CONVERTED
+  LOST
+}
+
+enum SharePlatform {
+  WHATSAPP
+  FACEBOOK
+  INSTAGRAM
+  TIKTOK
+  LINKEDIN
+  X
+  YOUTUBE
+  TELEGRAM
+  EMAIL
+  SMS
+  QR
+  OTHER
+}
+
+/// Lien de partage traçable (ex. relwick.com/l/ab12cd) créé depuis le dashboard.
+model ShareLink {
+  id         String        @id @default(uuid()) @db.Char(36)
+  slug       String        @unique @db.VarChar(16)
+  name       String        @db.VarChar(120)
+  platform   SharePlatform @default(OTHER)
+  campaign   String        @db.VarChar(120)
+  targetPath String        @default("/") @db.VarChar(512)
+  note       String?       @db.Text
+  isActive   Boolean       @default(true)
+  openCount  Int           @default(0)
+  createdAt  DateTime      @default(now()) @db.DateTime(3)
+  updatedAt  DateTime      @updatedAt @db.DateTime(3)
+  sessions   Session[]
+
+  @@index([platform])
+  @@index([createdAt])
+}
+
+model Visitor {
+  id           String    @id @db.Char(36)
+  firstSeenAt  DateTime  @default(now()) @db.DateTime(3)
+  lastSeenAt   DateTime  @db.DateTime(3)
+  sessionCount Int       @default(0)
+  firstIp      String    @db.VarChar(45)
+  lastIp       String    @db.VarChar(45)
+  lastCity     String?   @db.VarChar(120)
+  lastCountry  String?   @db.Char(2)
+  isBot        Boolean   @default(false)
+  sessions     Session[]
+  leads        Lead[]
+
+  @@index([lastSeenAt])
+  @@index([firstSeenAt])
+}
+
+model Session {
+  id               String         @id @db.Char(36)
+  visitorId        String         @db.Char(36)
+  visitor          Visitor        @relation(fields: [visitorId], references: [id], onDelete: Cascade)
+
+  // Réseau
+  ip               String         @db.VarChar(45)
+  ipVersion        Int            @db.TinyInt
+  asn              Int?
+  isp              String?        @db.VarChar(160)
+
+  // Géolocalisation
+  countryCode      String?        @db.Char(2)
+  country          String?        @db.VarChar(80)
+  region           String?        @db.VarChar(120)
+  city             String?        @db.VarChar(120)
+  postalCode       String?        @db.VarChar(20)
+  latitude         Decimal?       @db.Decimal(9, 6)
+  longitude        Decimal?       @db.Decimal(9, 6)
+  accuracyKm       Int?
+  geoTimezone      String?        @db.VarChar(64)
+
+  // Appareil
+  userAgent        String         @db.Text
+  browser          String?        @db.VarChar(60)
+  browserVersion   String?        @db.VarChar(30)
+  os               String?        @db.VarChar(60)
+  osVersion        String?        @db.VarChar(30)
+  deviceType       DeviceType     @default(UNKNOWN)
+  deviceVendor     String?        @db.VarChar(60)
+  deviceModel      String?        @db.VarChar(60)
+  screenW          Int?           @db.SmallInt
+  screenH          Int?           @db.SmallInt
+  viewportW        Int?           @db.SmallInt
+  viewportH        Int?           @db.SmallInt
+  language         String?        @db.VarChar(20)
+  browserTimezone  String?        @db.VarChar(64)
+
+  // Provenance
+  referrer         String?        @db.Text
+  referrerDomain   String?        @db.VarChar(255)
+  sourceCategory   SourceCategory @default(DIRECT)
+  utmSource        String?        @db.VarChar(120)
+  utmMedium        String?        @db.VarChar(120)
+  utmCampaign      String?        @db.VarChar(120)
+  utmTerm          String?        @db.VarChar(120)
+  utmContent       String?        @db.VarChar(120)
+  shareLinkId      String?        @db.Char(36)
+  shareLink        ShareLink?     @relation(fields: [shareLinkId], references: [id], onDelete: SetNull)
+
+  // Parcours
+  landingPath      String         @db.VarChar(512)
+  exitPath         String?        @db.VarChar(512)
+  lastSection      String?        @db.VarChar(60)
+  pageviewCount    Int            @default(0)
+  eventCount       Int            @default(0)
+  clickCount       Int            @default(0)
+  maxScrollPct     Int            @default(0) @db.TinyInt
+  activeSeconds    Int            @default(0)
+  startedAt        DateTime       @default(now()) @db.DateTime(3)
+  lastActivityAt   DateTime       @db.DateTime(3)
+  endedAt          DateTime?      @db.DateTime(3)
+  isBounce         Boolean?
+  isBot            Boolean        @default(false)
+  isExcluded       Boolean        @default(false)
+  converted        Boolean        @default(false)
+
+  pageViews        PageView[]
+  events           Event[]
+  leads            Lead[]
+
+  @@index([startedAt])
+  @@index([lastActivityAt])
+  @@index([visitorId, startedAt])
+  @@index([countryCode, city])
+  @@index([ip])
+  @@index([sourceCategory])
+  @@index([deviceType])
+  @@index([shareLinkId, startedAt])
+}
+
+model PageView {
+  id             String    @id @db.Char(36)
+  sessionId      String    @db.Char(36)
+  session        Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  path           String    @db.VarChar(512)
+  title          String?   @db.VarChar(255)
+  enteredAt      DateTime  @db.DateTime(3)
+  lastActivityAt DateTime  @db.DateTime(3)
+  activeSeconds  Int       @default(0)
+  maxScrollPct   Int       @default(0) @db.TinyInt
+  events         Event[]
+
+  @@index([sessionId, enteredAt])
+  @@index([path, enteredAt])
+}
+
+model Event {
+  id          BigInt    @id @default(autoincrement())
+  sessionId   String    @db.Char(36)
+  session     Session   @relation(fields: [sessionId], references: [id], onDelete: Cascade)
+  pageViewId  String?   @db.Char(36)
+  pageView    PageView? @relation(fields: [pageViewId], references: [id], onDelete: SetNull)
+  type        EventType
+  name        String?   @db.VarChar(120)
+  label       String?   @db.VarChar(160)
+  section     String?   @db.VarChar(60)
+  href        String?   @db.VarChar(1024)
+  value       Int?
+  xPct        Float?
+  yPx         Int?
+  meta        Json?
+  occurredAt  DateTime  @db.DateTime(3)
+  receivedAt  DateTime  @default(now()) @db.DateTime(3)
+
+  @@index([type, occurredAt])
+  @@index([sessionId, occurredAt])
+  @@index([name, occurredAt])
+  @@index([section, occurredAt])
+}
+
+model DailyStat {
+  date             DateTime @id @db.Date
+  visits           Int
+  uniqueVisitors   Int
+  newVisitors      Int
+  pageviews        Int
+  totalActiveSec   Int
+  bounces          Int
+  leads            Int
+  botVisits        Int
+  updatedAt        DateTime @updatedAt @db.DateTime(3)
+}
+
+model Lead {
+  id          String     @id @default(uuid()) @db.Char(36)
+  visitorId   String?    @db.Char(36)
+  visitor     Visitor?   @relation(fields: [visitorId], references: [id], onDelete: SetNull)
+  sessionId   String?    @db.Char(36)
+  session     Session?   @relation(fields: [sessionId], references: [id], onDelete: SetNull)
+  fullName    String     @db.VarChar(120)
+  phone       String     @db.VarChar(40)
+  email       String?    @db.VarChar(190)
+  projectType String     @db.VarChar(60)
+  callSlot    String     @db.VarChar(20)
+  message     String?    @db.Text
+  consent     Boolean
+  status      LeadStatus @default(NEW)
+  notes       String?    @db.Text
+  ip          String?    @db.VarChar(45)
+  city        String?    @db.VarChar(120)
+  createdAt   DateTime   @default(now()) @db.DateTime(3)
+  updatedAt   DateTime   @updatedAt @db.DateTime(3)
+  contactedAt DateTime?  @db.DateTime(3)
+
+  @@index([status, createdAt])
+  @@index([createdAt])
+}
+
+model AdminUser {
+  id           String         @id @default(uuid()) @db.Char(36)
+  email        String         @unique @db.VarChar(190)
+  name         String         @db.VarChar(120)
+  passwordHash String         @db.VarChar(255)
+  lastLoginAt  DateTime?      @db.DateTime(3)
+  createdAt    DateTime       @default(now()) @db.DateTime(3)
+  refreshTokens RefreshToken[]
+}
+
+model RefreshToken {
+  id         String    @id @default(uuid()) @db.Char(36)
+  userId     String    @db.Char(36)
+  user       AdminUser @relation(fields: [userId], references: [id], onDelete: Cascade)
+  tokenHash  String    @db.VarChar(255)
+  expiresAt  DateTime  @db.DateTime(3)
+  revokedAt  DateTime? @db.DateTime(3)
+  createdAt  DateTime  @default(now()) @db.DateTime(3)
+  userAgent  String?   @db.VarChar(255)
+  ip         String?   @db.VarChar(45)
+
+  @@index([userId])
+}
+
+model AdminLoginAttempt {
+  id        BigInt   @id @default(autoincrement())
+  email     String   @db.VarChar(190)
+  ip        String   @db.VarChar(45)
+  success   Boolean
+  createdAt DateTime @default(now()) @db.DateTime(3)
+
+  @@index([ip, createdAt])
+}
+
+model Setting {
+  key       String   @id @db.VarChar(60)
+  value     Json
+  updatedAt DateTime @updatedAt @db.DateTime(3)
+}

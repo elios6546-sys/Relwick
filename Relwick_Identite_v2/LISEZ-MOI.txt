@@ -1,0 +1,44 @@
+RELWICK — IDENTITÉ VISUELLE v2
+Octobre 2026 · Elios Ngombe
+
+Tous les logos sont des vectoriels dessinés (courbes exactes, aucune trace
+d'image). Ils s'agrandissent sans limite : enseigne, véhicule, gravure.
+
+SVG/            Masters vectoriels
+  relwick-logo.svg                 Logo principal, fond clair
+  relwick-logo-on-dark.svg         Logo sur fond sombre (Encre)
+  relwick-logo-stacked(-on-dark)   Version empilée, formats carrés
+  relwick-logo-black / -white      Une couleur (tampon, gravure, photo)
+  relwick-symbol(-on-dark).svg     Symbole seul
+  relwick-symbol-small.svg         Symbole sous 24 px de haut
+  relwick-symbol-black/-white/-ink/-ivory   Symbole une couleur
+  relwick-wordmark-*.svg           Wordmark seul
+PNG/            Exports transparents (1200 et 2400 px de large, symboles 256 et 1024 px)
+ICONES_APP/     Icône d'application 16 → 1024 px, favicon.ico (16/32/48), favicon.svg
+SCHEMAS/        Construction du symbole, zone de protection
+CODE/
+  relwick-theme.css     Variables CSS clair/sombre + thème Tailwind CSS v4
+  relwick-tokens.json   Toutes les valeurs (couleurs, espaces, rayons)
+  relwick_theme.dart    Thème Flutter (Material 3 + google_fonts)
+
+COULEURS
+  Indigo Relwick   #483EFE   action principale, symbole
+  Cuivre           #C6782E   éclat du logo, accent (5 % max)
+  Encre            #0D111E   texte, fond sombre
+  Ivoire           #F9F6F1   fond clair
+  Malachite        #00654B   succès (statuts uniquement)
+  Sur fond sombre : symbole #6E6AFF + #DC9659, texte #F9F6F1
+
+POLICES (Google Fonts, licence OFL, gratuites)
+  Instrument Sans   400 / 500 / 600   titres, interface, texte
+  JetBrains Mono    400               code uniquement
+  https://fonts.google.com/specimen/Instrument+Sans
+
+RÈGLES ESSENTIELLES
+  - Marge libre autour du logo : 1 module (la largeur de l'éclat cuivre).
+  - Taille minimale : 80 px de large à l'écran, 20 mm à l'impression.
+  - Jamais de dégradé, d'ombre, de lueur ni de contour sur le logo.
+  - Ne jamais retaper « relwick » dans une police : utiliser les fichiers.
+  - Impression : faire valider les teintes CMJN/Pantone sur épreuve.
+
+La charte complète (règles, voix, composants) est dans le design system Relwick.

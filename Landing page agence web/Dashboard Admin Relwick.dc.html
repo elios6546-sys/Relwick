@@ -1,0 +1,876 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Relwick — Tableau de bord</title>
+<link rel="icon" href="assets/relwick-favicon.svg">
+<link rel="stylesheet" href="_ds/relwick-design-system-7a933f2f-b2f0-490f-ac6d-b696d4792dd1/styles.css">
+<script src="_ds/relwick-design-system-7a933f2f-b2f0-490f-ac6d-b696d4792dd1/_ds_bundle.js"></script>
+<style>body{margin:0;background:var(--rw-bg);color:var(--rw-text);font:var(--text-body)}a{color:var(--rw-link)}a:hover{color:var(--rw-primary-hover)}</style>
+</helmet>
+<div data-theme="{{ theme }}" style="display:flex;align-items:flex-start;min-height:100vh;background:var(--rw-bg);color:var(--rw-text);font-family:var(--font-sans);font-variant-numeric:tabular-nums">
+
+<sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+<aside data-screen-label="Menu" style="position:sticky;top:0;height:100vh;width:248px;flex:none;display:flex;flex-direction:column;gap:24px;background:var(--rw-surface);border-right:1px solid var(--rw-line);padding:22px 16px 16px">
+  <div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 8px">
+    <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/relwick-logo.svg" alt="relwick" style="height:24px;display:block"></sc-if>
+    <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><img src="assets/relwick-logo-on-dark.svg" alt="relwick" style="height:24px;display:block"></sc-if>
+    <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Badge" tone="copper" hint-size="56px,24px">Admin</x-import>
+  </div>
+  <nav style="display:flex;flex-direction:column;gap:2px">
+    <span style="font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);padding:8px 12px 12px">Analyse</span>
+    <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+      <button onClick="{{ n.go }}" aria-current="{{ n.current }}" style="display:flex;align-items:center;gap:12px;height:40px;padding:0 12px;border:0;border-radius:6px;background:{{ n.bg }};color:{{ n.fg }};font:500 14px var(--font-sans);cursor:pointer;text-align:left;transition:background 160ms,color 160ms">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ n.icon }}" size="{{ 18 }}" hint-size="18px,18px"></x-import>
+        <span style="flex:1">{{ n.label }}</span>
+        <span style="font-size:12px;color:var(--rw-text-muted)">{{ n.count }}</span>
+      </button>
+    </sc-for>
+  </nav>
+  <div style="margin-top:auto;display:flex;flex-direction:column;gap:12px">
+    <a href="Landing%20Relwick.dc.html" style="display:flex;align-items:center;gap:12px;height:40px;padding:0 12px;border-radius:6px;color:var(--rw-text-muted);font:500 14px var(--font-sans);text-decoration:none" style-hover="background:var(--rw-surface-sunken);color:var(--rw-text);text-decoration:none">
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="external-link" size="{{ 18 }}" hint-size="18px,18px"></x-import>
+      <span>Voir le site</span>
+    </a>
+    <div style="display:flex;align-items:center;gap:12px;padding:14px 8px 0;border-top:1px solid var(--rw-line)">
+      <span style="flex:none;display:grid;place-items:center;width:36px;height:36px;border-radius:12px 0;background:var(--rw-primary);color:var(--rw-on-primary);font:600 13px/1 var(--font-sans)">EN</span>
+      <div style="flex:1;min-width:0">
+        <div style="font:600 14px/1.3 var(--font-sans)">Elios Ngombe</div>
+        <div style="font-size:13px;color:var(--rw-text-muted)">Administrateur</div>
+      </div>
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.IconButton" icon="log-out" label="Se déconnecter" variant="ghost" size="sm" hint-size="32px,32px"></x-import>
+    </div>
+  </div>
+</aside>
+</sc-if>
+
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;min-height:100vh">
+  <header data-screen-label="Barre du haut" style="position:sticky;top:0;z-index:40;background:color-mix(in srgb,var(--rw-bg) 82%,transparent);backdrop-filter:blur(14px);border-bottom:1px solid var(--rw-line)">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:16px 24px;padding:16px clamp(16px,3vw,32px);min-height:76px">
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}"><img src="assets/relwick-logo.svg" alt="relwick" style="height:22px;display:block"></sc-if>
+      <div style="flex:1 1 240px;min-width:0">
+        <h1 style="font:500 24px/1.2 var(--font-sans);letter-spacing:-0.02em;margin:0">{{ title }}</h1>
+        <p style="margin:2px 0 0;font-size:14px;color:var(--rw-text-muted)">{{ subtitle }}</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px">
+        <span data-pulse-wrap="" style="display:inline-flex"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Badge" tone="success" dot="{{ true }}" hint-size="92px,24px">{{ onlineLabel }}</x-import></span>
+        <div style="position:relative;display:inline-flex;max-width:100%;overflow:hidden;border-radius:10px">
+          <x-import key="{{ tabsKey }}" component-from-global-scope="RelwickDesignSystem_7a933f.Tabs" variant="pill" items="{{ periods }}" value="{{ period }}" onChange="{{ setPeriod }}" hint-size="300px,42px"></x-import>
+        </div>
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" variant="secondary" icon="download" onClick="{{ exportCsv }}" hint-size="122px,40px">Exporter</x-import>
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.IconButton" icon="{{ themeIcon }}" label="Changer de thème" variant="ghost" onClick="{{ toggleTheme }}" hint-size="40px,40px"></x-import>
+      </div>
+    </div>
+    <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+      <nav style="display:flex;gap:4px;overflow-x:auto;padding:0 clamp(16px,3vw,32px) 12px">
+        <sc-for list="{{ navItems }}" as="n" hint-placeholder-count="4">
+          <button onClick="{{ n.go }}" style="flex:none;display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;border:0;border-radius:6px;background:{{ n.bg }};color:{{ n.fg }};font:500 14px var(--font-sans);cursor:pointer">
+            <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ n.icon }}" size="{{ 16 }}" hint-size="16px,16px"></x-import>
+            <span>{{ n.label }}</span>
+          </button>
+        </sc-for>
+      </nav>
+    </sc-if>
+  </header>
+
+  <main style="flex:1;width:100%;max-width:1360px;margin:0 auto;padding:28px clamp(16px,3vw,32px) 56px;display:flex;flex-direction:column;gap:20px">
+
+<sc-if value="{{ vOverview }}" hint-placeholder-val="{{ true }}">
+    <div data-anim="" data-screen-label="Vue d’ensemble — chiffres clés" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));gap:16px">
+      <sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+        <div class="rw-card" style="display:flex;flex-direction:column;gap:14px;padding:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <span style="font-size:14px;color:var(--rw-text-muted)">{{ k.label }}</span>
+            <span style="display:grid;place-items:center;width:32px;height:32px;border-radius:6px;background:var(--rw-primary-soft);color:var(--rw-primary-soft-text)"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ k.icon }}" size="{{ 18 }}" hint-size="18px,18px"></x-import></span>
+          </div>
+          <div style="font:500 32px/1.1 var(--font-sans);letter-spacing:-0.02em">{{ k.value }}</div>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+            <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Badge" tone="{{ k.tone }}" hint-size="56px,24px">{{ k.delta }}</x-import>
+            <span style="font-size:13px;color:var(--rw-text-muted)">{{ k.cmp }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+
+    <div data-anim="" style="display:flex;flex-wrap:wrap;gap:16px;align-items:stretch">
+      <div class="rw-card" style="flex:2 1 560px;min-width:0;display:flex;flex-direction:column;gap:20px">
+        <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-start;gap:8px 16px">
+          <div>
+            <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Visites</h2>
+            <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">{{ chartSub }}</p>
+          </div>
+          <div style="text-align:right">
+            <div style="font:500 22px/1.2 var(--font-sans);letter-spacing:-0.01em">{{ chartValue }}</div>
+            <div style="font-size:13px;color:var(--rw-text-muted)">{{ chartLabel }}</div>
+          </div>
+        </div>
+        <div style="position:relative;height:240px;margin-left:36px">
+          <sc-for list="{{ gridLines }}" as="g" hint-placeholder-count="3">
+            <div style="position:absolute;left:0;right:0;bottom:{{ g.b }};border-top:1px dashed var(--rw-line)">
+              <span style="position:absolute;left:-36px;top:-8px;width:28px;text-align:right;font-size:11px;color:var(--rw-text-muted)">{{ g.v }}</span>
+            </div>
+          </sc-for>
+          <div onMouseLeave="{{ barLeave }}" style="position:relative;display:flex;align-items:flex-end;gap:{{ barGap }};height:100%">
+            <sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
+              <div onMouseEnter="{{ b.enter }}" style="flex:1;min-width:0;height:100%;display:flex;align-items:flex-end;cursor:default">
+                <div data-bar="" style="width:100%;height:{{ b.h }};background:{{ b.bg }};border-radius:4px 4px 0 0;transform-origin:bottom;transition:height 560ms cubic-bezier(.16,1,.3,1),background 160ms"></div>
+              </div>
+            </sc-for>
+          </div>
+        </div>
+        <div style="display:flex;gap:{{ barGap }};margin:-8px 0 0 36px">
+          <sc-for list="{{ bars }}" as="b" hint-placeholder-count="7">
+            <span style="flex:1;min-width:0;font-size:11px;color:var(--rw-text-muted);white-space:nowrap">{{ b.lab }}</span>
+          </sc-for>
+        </div>
+      </div>
+
+      <div class="rw-card" style="flex:1 1 300px;min-width:0;display:flex;flex-direction:column;gap:12px">
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:12px">
+          <div>
+            <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">En direct</h2>
+            <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Dernières actions sur le site</p>
+          </div>
+        </div>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ live }}" as="e" hint-placeholder-count="5">
+            <div data-live="" style="display:flex;gap:12px;align-items:flex-start;padding:11px 0;border-top:1px solid var(--rw-line)">
+              <span style="flex:none;width:8px;height:8px;margin-top:7px;border-radius:50%;background:{{ e.dot }}"></span>
+              <div style="flex:1;min-width:0">
+                <div style="font-size:14px;font-weight:500">{{ e.text }}</div>
+                <div style="font-size:13px;color:var(--rw-text-muted)"><span style="font-family:var(--font-mono);font-size:12px">{{ e.ip }}</span> · {{ e.city }}</div>
+              </div>
+              <span style="flex:none;font-size:12px;color:var(--rw-text-muted);white-space:nowrap">{{ e.rel }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <div style="display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:auto;padding-top:12px;border-top:1px solid var(--rw-line);font-size:12px;color:var(--rw-text-muted)">
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--rw-primary)"></span>Arrivée</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--rw-line-strong)"></span>Défilement</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--rw-copper)"></span>Clic</span>
+          <span style="display:inline-flex;align-items:center;gap:6px"><span style="width:8px;height:8px;border-radius:50%;background:var(--rw-text-muted)"></span>Départ</span>
+        </div>
+      </div>
+    </div>
+
+    <div data-anim="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,320px),1fr));gap:16px">
+      <div class="rw-card" style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Villes</h2>
+          <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">D’où viennent vos visiteurs</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ topCities }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px">
+                <span style="min-width:0"><span style="font-weight:500">{{ c.name }}</span> <span style="color:var(--rw-text-muted)">{{ c.sub }}</span></span>
+                <span style="flex:none;font-weight:500">{{ c.n }}</span>
+              </div>
+              <div style="height:6px;border-radius:9999px;background:var(--rw-surface-sunken);overflow:hidden"><div data-fill="" style="height:100%;width:{{ c.w }};background:var(--rw-primary);border-radius:9999px;transform-origin:left;transition:width 560ms cubic-bezier(.16,1,.3,1)"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="rw-card" style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Boutons les plus cliqués</h2>
+          <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Nombre de visites avec un clic</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ topButtons }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px">
+                <span style="min-width:0"><span style="font-weight:500">{{ c.name }}</span> <span style="color:var(--rw-text-muted)">{{ c.sub }}</span></span>
+                <span style="flex:none;font-weight:500">{{ c.n }}</span>
+              </div>
+              <div style="height:6px;border-radius:9999px;background:var(--rw-surface-sunken);overflow:hidden"><div data-fill="" style="height:100%;width:{{ c.w }};background:var(--rw-primary);border-radius:9999px;transform-origin:left;transition:width 560ms cubic-bezier(.16,1,.3,1)"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="rw-card" style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Où ils s’arrêtent</h2>
+          <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Part des visites ayant atteint chaque section</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ funnel }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px">
+                <span style="min-width:0"><span style="font-weight:500">{{ c.name }}</span> <span style="color:var(--rw-text-muted)">{{ c.sub }}</span></span>
+                <span style="flex:none;font-weight:500">{{ c.n }}</span>
+              </div>
+              <div style="height:6px;border-radius:9999px;background:var(--rw-surface-sunken);overflow:hidden"><div data-fill="" style="height:100%;width:{{ c.w }};background:var(--rw-primary);border-radius:9999px;transform-origin:left;transition:width 560ms cubic-bezier(.16,1,.3,1)"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+
+    <div data-anim="" class="rw-card" style="padding:0;overflow:hidden">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px 16px;padding:20px 24px">
+        <div>
+          <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Visiteurs récents</h2>
+          <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Cliquez sur une ligne pour voir le parcours complet.</p>
+        </div>
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" variant="ghost" iconRight="arrow-right" onClick="{{ goVisitors }}" hint-size="170px,40px">Tous les visiteurs</x-import>
+      </div>
+      <div style="overflow-x:auto">
+        <div style="min-width:820px">
+          <div style="display:grid;grid-template-columns:minmax(150px,1.3fr) minmax(130px,1.1fr) minmax(140px,1.1fr) minmax(90px,.7fr) minmax(130px,1fr) minmax(110px,.9fr);gap:16px;padding:10px 24px;background:var(--rw-surface-sunken);font:500 13px var(--font-sans);color:var(--rw-text-muted)">
+            <span>Adresse IP</span><span>Ville</span><span>Appareil</span><span>Durée</span><span>Arrêt</span><span>Arrivée</span>
+          </div>
+          <sc-for list="{{ recent }}" as="r" hint-placeholder-count="6">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(150px,1.3fr) minmax(130px,1.1fr) minmax(140px,1.1fr) minmax(90px,.7fr) minmax(130px,1fr) minmax(110px,.9fr);gap:16px;align-items:center;padding:12px 24px;border-top:1px solid var(--rw-line);font-size:14px;cursor:pointer;transition:background 160ms" style-hover="background:var(--rw-surface-sunken)">
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-family:var(--font-mono);font-size:13px">{{ r.ip }}</span><span style="font-size:12px;color:var(--rw-text-muted)">{{ r.visits }}</span></div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:500">{{ r.city }}</span><span style="font-size:12px;color:var(--rw-text-muted)">{{ r.country }}</span></div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span>{{ r.dev }}</span><span style="font-size:12px;color:var(--rw-text-muted)">{{ r.devSub }}</span></div>
+              <span>{{ r.dur }}</span>
+              <div style="display:flex;flex-direction:column;gap:6px"><span>{{ r.stop }}</span><div style="display:flex;gap:3px"><sc-for list="{{ r.segs }}" as="g" hint-placeholder-count="6"><span style="width:14px;height:4px;border-radius:2px;background:{{ g.bg }}"></span></sc-for></div></div>
+              <span style="color:var(--rw-text-muted)">{{ r.rel }}</span>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+</sc-if>
+
+<sc-if value="{{ vVisitors }}" hint-placeholder-val="{{ false }}">
+    <div data-anim="" data-screen-label="Visiteurs — filtres" class="rw-card" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;padding:16px">
+      <div style="flex:2 1 260px;min-width:0"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Input" placeholder="Rechercher une adresse IP ou une ville" value="{{ q }}" onChange="{{ onQ }}" hint-size="100%,40px"></x-import></div>
+      <div style="flex:1 1 170px;min-width:0"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Select" options="{{ cityOpts }}" value="{{ fCity }}" onChange="{{ onCity }}" hint-size="100%,40px"></x-import></div>
+      <div style="flex:1 1 170px;min-width:0"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Select" options="{{ devOpts }}" value="{{ fDev }}" onChange="{{ onDev }}" hint-size="100%,40px"></x-import></div>
+      <div style="flex:1 1 170px;min-width:0"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Select" options="{{ srcOpts }}" value="{{ fSrc }}" onChange="{{ onSrc }}" hint-size="100%,40px"></x-import></div>
+      <div style="flex:1 1 170px;min-width:0"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Select" options="{{ durOpts }}" value="{{ fDur }}" onChange="{{ onDur }}" hint-size="100%,40px"></x-import></div>
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" variant="ghost" icon="rotate-ccw" onClick="{{ resetFilters }}" hint-size="140px,40px">Réinitialiser</x-import>
+    </div>
+
+    <div data-anim="" class="rw-card" style="padding:0;overflow:hidden">
+      <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 16px;padding:18px 24px">
+        <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">{{ resultsLabel }}</h2>
+        <span style="font-size:14px;color:var(--rw-text-muted)">Cliquez sur une ligne pour voir le parcours complet.</span>
+      </div>
+      <div style="overflow-x:auto">
+        <div style="min-width:1080px">
+          <div style="display:grid;grid-template-columns:minmax(150px,1.3fr) minmax(130px,1.1fr) minmax(140px,1.1fr) minmax(90px,.8fr) minmax(130px,1fr) minmax(90px,.7fr) minmax(130px,1fr) minmax(56px,.4fr);gap:16px;align-items:center;padding:10px 24px;background:var(--rw-surface-sunken);font:500 13px var(--font-sans);color:var(--rw-text-muted)">
+            <span>Adresse IP</span><span>Ville</span><span>Appareil</span><span>Source</span>
+            <button onClick="{{ sortBy.start }}" style="display:inline-flex;align-items:center;gap:4px;border:0;background:transparent;padding:0;font:500 13px var(--font-sans);color:{{ sortCol.start }};cursor:pointer">Arrivée<x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ sortIc.start }}" size="{{ 14 }}" hint-size="14px,14px"></x-import></button>
+            <button onClick="{{ sortBy.dur }}" style="display:inline-flex;align-items:center;gap:4px;border:0;background:transparent;padding:0;font:500 13px var(--font-sans);color:{{ sortCol.dur }};cursor:pointer">Durée<x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ sortIc.dur }}" size="{{ 14 }}" hint-size="14px,14px"></x-import></button>
+            <button onClick="{{ sortBy.depth }}" style="display:inline-flex;align-items:center;gap:4px;border:0;background:transparent;padding:0;font:500 13px var(--font-sans);color:{{ sortCol.depth }};cursor:pointer">Arrêt<x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ sortIc.depth }}" size="{{ 14 }}" hint-size="14px,14px"></x-import></button>
+            <button onClick="{{ sortBy.clicks }}" style="display:inline-flex;align-items:center;gap:4px;border:0;background:transparent;padding:0;font:500 13px var(--font-sans);color:{{ sortCol.clicks }};cursor:pointer">Clics<x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ sortIc.clicks }}" size="{{ 14 }}" hint-size="14px,14px"></x-import></button>
+          </div>
+          <sc-for list="{{ rows }}" as="r" hint-placeholder-count="12">
+            <div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(150px,1.3fr) minmax(130px,1.1fr) minmax(140px,1.1fr) minmax(90px,.8fr) minmax(130px,1fr) minmax(90px,.7fr) minmax(130px,1fr) minmax(56px,.4fr);gap:16px;align-items:center;padding:12px 24px;border-top:1px solid var(--rw-line);font-size:14px;cursor:pointer;transition:background 160ms" style-hover="background:var(--rw-surface-sunken)">
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-family:var(--font-mono);font-size:13px">{{ r.ip }}</span><span style="font-size:12px;color:var(--rw-text-muted)">{{ r.visits }}</span></div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span style="font-weight:500">{{ r.city }}</span><span style="font-size:12px;color:var(--rw-text-muted)">{{ r.country }}</span></div>
+              <div style="display:flex;flex-direction:column;gap:2px;min-width:0"><span>{{ r.dev }}</span><span style="font-size:12px;color:var(--rw-text-muted)">{{ r.devSub }}</span></div>
+              <span>{{ r.src }}</span>
+              <span>{{ r.date }}</span>
+              <span>{{ r.dur }}</span>
+              <div style="display:flex;flex-direction:column;gap:6px"><span>{{ r.stop }}</span><div style="display:flex;gap:3px"><sc-for list="{{ r.segs }}" as="g" hint-placeholder-count="6"><span style="width:14px;height:4px;border-radius:2px;background:{{ g.bg }}"></span></sc-for></div></div>
+              <span style="font-weight:500">{{ r.clicks }}</span>
+            </div>
+          </sc-for>
+          <sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+            <div style="display:flex;flex-direction:column;align-items:center;gap:12px;padding:48px 24px;border-top:1px solid var(--rw-line);text-align:center">
+              <span style="font-weight:500">Aucune visite ne correspond à ces filtres.</span>
+              <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" variant="secondary" icon="rotate-ccw" onClick="{{ resetFilters }}" hint-size="190px,40px">Réinitialiser les filtres</x-import>
+            </div>
+          </sc-if>
+        </div>
+      </div>
+      <div style="display:flex;justify-content:space-between;align-items:center;gap:16px;padding:12px 24px;border-top:1px solid var(--rw-line);font-size:14px;color:var(--rw-text-muted)">
+        <span>{{ pageLabel }}</span>
+        <div style="display:flex;gap:4px">
+          <x-import component-from-global-scope="RelwickDesignSystem_7a933f.IconButton" icon="chevron-left" label="Page précédente" variant="ghost" size="sm" disabled="{{ prevDis }}" onClick="{{ prevPage }}" hint-size="32px,32px"></x-import>
+          <x-import component-from-global-scope="RelwickDesignSystem_7a933f.IconButton" icon="chevron-right" label="Page suivante" variant="ghost" size="sm" disabled="{{ nextDis }}" onClick="{{ nextPage }}" hint-size="32px,32px"></x-import>
+        </div>
+      </div>
+    </div>
+</sc-if>
+
+<sc-if value="{{ vClicks }}" hint-placeholder-val="{{ false }}">
+    <div data-anim="" data-screen-label="Clics — chiffres clés" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px">
+      <sc-for list="{{ clickKpis }}" as="k" hint-placeholder-count="3">
+        <div class="rw-card" style="display:flex;flex-direction:column;gap:14px;padding:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <span style="font-size:14px;color:var(--rw-text-muted)">{{ k.label }}</span>
+            <span style="display:grid;place-items:center;width:32px;height:32px;border-radius:6px;background:var(--rw-primary-soft);color:var(--rw-primary-soft-text)"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ k.icon }}" size="{{ 18 }}" hint-size="18px,18px"></x-import></span>
+          </div>
+          <div style="font:500 32px/1.1 var(--font-sans);letter-spacing:-0.02em">{{ k.value }}</div>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+            <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Badge" tone="{{ k.tone }}" hint-size="56px,24px">{{ k.delta }}</x-import>
+            <span style="font-size:13px;color:var(--rw-text-muted)">{{ k.cmp }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div data-anim="" class="rw-card" style="padding:0;overflow:hidden">
+      <div style="padding:20px 24px">
+        <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Tous les boutons suivis</h2>
+        <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Classés par nombre de visites avec au moins un clic sur le bouton.</p>
+      </div>
+      <div style="overflow-x:auto">
+        <div style="min-width:860px">
+          <div style="display:grid;grid-template-columns:40px minmax(200px,1.5fr) minmax(130px,1fr) minmax(70px,.5fr) minmax(120px,.7fr) minmax(200px,1.4fr);gap:16px;padding:10px 24px;background:var(--rw-surface-sunken);font:500 13px var(--font-sans);color:var(--rw-text-muted)">
+            <span>N°</span><span>Bouton</span><span>Emplacement</span><span>Clics</span><span>Visiteurs uniques</span><span>Taux de clic</span>
+          </div>
+          <sc-for list="{{ clickTable }}" as="c" hint-placeholder-count="11">
+            <div style="display:grid;grid-template-columns:40px minmax(200px,1.5fr) minmax(130px,1fr) minmax(70px,.5fr) minmax(120px,.7fr) minmax(200px,1.4fr);gap:16px;align-items:center;padding:14px 24px;border-top:1px solid var(--rw-line);font-size:14px">
+              <span style="font:500 13px var(--font-mono);color:var(--rw-copper-text)">{{ c.rank }}</span>
+              <span style="font-weight:500">{{ c.label }}</span>
+              <span style="color:var(--rw-text-muted)">{{ c.where }}</span>
+              <span style="font-weight:500">{{ c.n }}</span>
+              <span>{{ c.u }}</span>
+              <div style="display:flex;align-items:center;gap:12px">
+                <div style="flex:1;height:6px;border-radius:9999px;background:var(--rw-surface-sunken);overflow:hidden"><div data-fill="" style="height:100%;width:{{ c.w }};background:var(--rw-primary);border-radius:9999px;transform-origin:left;transition:width 560ms cubic-bezier(.16,1,.3,1)"></div></div>
+                <span style="flex:none;width:44px;text-align:right">{{ c.rate }}</span>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+</sc-if>
+
+<sc-if value="{{ vBehavior }}" hint-placeholder-val="{{ false }}">
+    <div data-anim="" data-screen-label="Comportement — chiffres clés" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:16px">
+      <sc-for list="{{ behKpis }}" as="k" hint-placeholder-count="3">
+        <div class="rw-card" style="display:flex;flex-direction:column;gap:14px;padding:20px">
+          <div style="display:flex;align-items:center;justify-content:space-between;gap:12px">
+            <span style="font-size:14px;color:var(--rw-text-muted)">{{ k.label }}</span>
+            <span style="display:grid;place-items:center;width:32px;height:32px;border-radius:6px;background:var(--rw-primary-soft);color:var(--rw-primary-soft-text)"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="{{ k.icon }}" size="{{ 18 }}" hint-size="18px,18px"></x-import></span>
+          </div>
+          <div style="font:500 32px/1.1 var(--font-sans);letter-spacing:-0.02em">{{ k.value }}</div>
+          <div style="display:flex;flex-wrap:wrap;align-items:center;gap:8px">
+            <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Badge" tone="{{ k.tone }}" hint-size="56px,24px">{{ k.delta }}</x-import>
+            <span style="font-size:13px;color:var(--rw-text-muted)">{{ k.cmp }}</span>
+          </div>
+        </div>
+      </sc-for>
+    </div>
+    <div data-anim="" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:16px">
+      <div class="rw-card" style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Défilement et sorties</h2>
+          <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Jusqu’où les visiteurs descendent sur la page d’accueil</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ funnel }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px">
+                <span style="min-width:0"><span style="font-weight:500">{{ c.name }}</span> <span style="color:var(--rw-text-muted)">{{ c.sub }}</span></span>
+                <span style="flex:none;font-weight:500">{{ c.n }}</span>
+              </div>
+              <div style="height:6px;border-radius:9999px;background:var(--rw-surface-sunken);overflow:hidden"><div data-fill="" style="height:100%;width:{{ c.w }};background:var(--rw-primary);border-radius:9999px;transform-origin:left;transition:width 560ms cubic-bezier(.16,1,.3,1)"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="rw-card" style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Temps passé sur le site</h2>
+          <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Répartition des visites par durée</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ durList }}" as="c" hint-placeholder-count="6">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px">
+                <span style="min-width:0"><span style="font-weight:500">{{ c.name }}</span> <span style="color:var(--rw-text-muted)">{{ c.sub }}</span></span>
+                <span style="flex:none;font-weight:500">{{ c.n }}</span>
+              </div>
+              <div style="height:6px;border-radius:9999px;background:var(--rw-surface-sunken);overflow:hidden"><div data-fill="" style="height:100%;width:{{ c.w }};background:var(--rw-primary);border-radius:9999px;transform-origin:left;transition:width 560ms cubic-bezier(.16,1,.3,1)"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="rw-card" style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Sources</h2>
+          <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Comment les visiteurs arrivent sur le site</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ srcList }}" as="c" hint-placeholder-count="5">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px">
+                <span style="min-width:0"><span style="font-weight:500">{{ c.name }}</span> <span style="color:var(--rw-text-muted)">{{ c.sub }}</span></span>
+                <span style="flex:none;font-weight:500">{{ c.n }}</span>
+              </div>
+              <div style="height:6px;border-radius:9999px;background:var(--rw-surface-sunken);overflow:hidden"><div data-fill="" style="height:100%;width:{{ c.w }};background:var(--rw-primary);border-radius:9999px;transform-origin:left;transition:width 560ms cubic-bezier(.16,1,.3,1)"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+      <div class="rw-card" style="display:flex;flex-direction:column;gap:20px">
+        <div>
+          <h2 style="font:600 17px/1.3 var(--font-sans);margin:0">Appareils</h2>
+          <p style="margin:4px 0 0;font-size:14px;color:var(--rw-text-muted)">Systèmes utilisés par vos visiteurs</p>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:14px">
+          <sc-for list="{{ devList }}" as="c" hint-placeholder-count="5">
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:14px">
+                <span style="min-width:0"><span style="font-weight:500">{{ c.name }}</span> <span style="color:var(--rw-text-muted)">{{ c.sub }}</span></span>
+                <span style="flex:none;font-weight:500">{{ c.n }}</span>
+              </div>
+              <div style="height:6px;border-radius:9999px;background:var(--rw-surface-sunken);overflow:hidden"><div data-fill="" style="height:100%;width:{{ c.w }};background:var(--rw-primary);border-radius:9999px;transform-origin:left;transition:width 560ms cubic-bezier(.16,1,.3,1)"></div></div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+</sc-if>
+
+  </main>
+</div>
+
+<sc-if value="{{ hasSel }}" hint-placeholder-val="{{ false }}">
+  <div data-overlay="" onClick="{{ closeSel }}" style="position:fixed;inset:0;z-index:90;background:rgba(13,17,30,.48);backdrop-filter:blur(6px)"></div>
+  <aside data-drawer="" role="dialog" aria-label="Détail de la visite" data-screen-label="Détail de la visite" style="position:fixed;top:0;right:0;bottom:0;z-index:91;width:min(480px,100%);display:flex;flex-direction:column;background:var(--rw-surface);color:var(--rw-text);box-shadow:var(--shadow-3);border-radius:16px 0 0 16px;overflow:hidden">
+    <div style="display:flex;align-items:flex-start;gap:12px;padding:24px 24px 20px;border-bottom:1px solid var(--rw-line)">
+      <div style="flex:1;min-width:0">
+        <span style="display:inline-block;font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);margin-bottom:10px">{{ sel.num }}</span>
+        <div style="font:500 22px/1.2 var(--font-mono);letter-spacing:-0.01em;word-break:break-all">{{ sel.ip }}</div>
+        <div style="margin-top:6px;font-size:14px;color:var(--rw-text-muted)">{{ sel.place }}</div>
+      </div>
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.IconButton" icon="copy" label="Copier l’adresse IP" variant="ghost" onClick="{{ copyIp }}" hint-size="40px,40px"></x-import>
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.IconButton" icon="x" label="Fermer" variant="ghost" onClick="{{ closeSel }}" hint-size="40px,40px"></x-import>
+    </div>
+    <div style="flex:1;overflow-y:auto;padding:24px;display:flex;flex-direction:column;gap:28px">
+      <div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 24px">
+        <sc-for list="{{ sel.info }}" as="i" hint-placeholder-count="8">
+          <div style="display:flex;flex-direction:column;gap:2px;min-width:0">
+            <span style="font-size:13px;color:var(--rw-text-muted)">{{ i.k }}</span>
+            <span style="font-size:14px;font-weight:500">{{ i.v }}</span>
+          </div>
+        </sc-for>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <h3 style="font:600 15px/1.3 var(--font-sans);margin:0">Profondeur de défilement</h3>
+        <div style="display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:4px">
+          <sc-for list="{{ sel.segs }}" as="g" hint-placeholder-count="6">
+            <div style="display:flex;flex-direction:column;gap:6px;min-width:0">
+              <span style="height:8px;border-radius:2px;background:{{ g.bg }}"></span>
+              <span style="font-size:12px;color:{{ g.fg }};font-weight:{{ g.w }};white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ g.name }}</span>
+            </div>
+          </sc-for>
+        </div>
+        <p style="margin:0;font-size:13px;color:var(--rw-text-muted)">{{ sel.stop }}</p>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:12px">
+        <h3 style="font:600 15px/1.3 var(--font-sans);margin:0">Boutons cliqués</h3>
+        <sc-if value="{{ sel.hasClicks }}" hint-placeholder-val="{{ true }}">
+          <div style="display:flex;flex-wrap:wrap;gap:6px">
+            <sc-for list="{{ sel.clickTags }}" as="t" hint-placeholder-count="2">
+              <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Tag" tone="primary" hint-size="120px,28px">{{ t.label }}</x-import>
+            </sc-for>
+          </div>
+        </sc-if>
+        <sc-if value="{{ sel.noClicks }}" hint-placeholder-val="{{ false }}">
+          <p style="margin:0;font-size:14px;color:var(--rw-text-muted)">Aucun clic pendant cette visite.</p>
+        </sc-if>
+      </div>
+      <div style="display:flex;flex-direction:column;gap:14px">
+        <h3 style="font:600 15px/1.3 var(--font-sans);margin:0">Parcours</h3>
+        <div style="display:flex;flex-direction:column">
+          <sc-for list="{{ sel.events }}" as="e" hint-placeholder-count="5">
+            <div style="display:grid;grid-template-columns:44px 14px minmax(0,1fr);gap:0 12px;align-items:stretch">
+              <span style="font:400 12px/20px var(--font-mono);color:var(--rw-text-muted);text-align:right">{{ e.t }}</span>
+              <div style="position:relative;display:flex;justify-content:center">
+                <span style="position:absolute;top:0;bottom:0;width:1px;background:var(--rw-line)"></span>
+                <span style="position:relative;margin-top:6px;width:9px;height:9px;border-radius:50%;background:{{ e.dot }};box-shadow:0 0 0 3px var(--rw-surface)"></span>
+              </div>
+              <div style="padding-bottom:16px;min-width:0">
+                <div style="font-size:14px;font-weight:500;line-height:20px">{{ e.text }}</div>
+                <div style="font-size:13px;color:var(--rw-text-muted)">{{ e.sub }}</div>
+              </div>
+            </div>
+          </sc-for>
+        </div>
+      </div>
+    </div>
+  </aside>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;right:24px;bottom:24px;left:24px;z-index:120;display:flex;justify-content:flex-end;pointer-events:none">
+    <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Toast" tone="success" title="{{ toastTitle }}" description="{{ toastDesc }}" hint-size="320px,64px"></x-import>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script>
+const DAY = 86400000, HOUR = 3600000, PAGE = 12;
+const EASE = 'cubic-bezier(.16,1,.3,1)';
+const SECTIONS = ['Hero', 'Services', 'Réalisations', 'À propos', 'Contact', 'Footer'];
+const MONTHS = ['janv.', 'févr.', 'mars', 'avr.', 'mai', 'juin', 'juil.', 'août', 'sept.', 'oct.', 'nov.', 'déc.'];
+const DOW = ['dim.', 'lun.', 'mar.', 'mer.', 'jeu.', 'ven.', 'sam.'];
+const CITIES = [['Kolwezi', 'RDC', 34], ['Lubumbashi', 'RDC', 22], ['Kinshasa', 'RDC', 15], ['Likasi', 'RDC', 8], ['Goma', 'RDC', 4], ['Mbuji-Mayi', 'RDC', 3], ['Lusaka', 'Zambie', 4], ['Johannesburg', 'Afrique du Sud', 4], ['Paris', 'France', 4], ['Bruxelles', 'Belgique', 2]];
+const IPP = { 'RDC': ['41.243', '197.157', '102.68', '41.79', '196.250'], 'Zambie': ['41.223', '165.56'], 'Afrique du Sud': ['105.224', '41.13'], 'France': ['90.112', '82.64', '176.150'], 'Belgique': ['81.240', '109.130'] };
+const DEVICES = [['Android', 'Mobile', 52], ['iPhone', 'Mobile', 17], ['Windows', 'Ordinateur', 21], ['macOS', 'Ordinateur', 6], ['iPad', 'Tablette', 4]];
+const BROWSERS = { Android: [['Chrome', 78], ['Samsung Internet', 14], ['Opera Mini', 8]], iPhone: [['Safari', 90], ['Chrome', 10]], iPad: [['Safari', 100]], Windows: [['Chrome', 70], ['Edge', 22], ['Firefox', 8]], macOS: [['Safari', 60], ['Chrome', 40]] };
+const SOURCES = [['Direct', 28], ['Google', 27], ['WhatsApp', 25], ['Facebook', 15], ['Instagram', 5]];
+const DEPTHS = [[0, 25], [1, 24], [2, 18], [3, 12], [4, 15], [5, 6]];
+const HW = [1, .5, .3, .3, .4, .8, 1.5, 3, 5, 7, 8, 8, 7, 6, 6, 6, 6, 7, 8, 9, 8, 6, 4, 2].map((w, h) => [h, w]);
+const BUTTONS = [
+  { id: 'hero-call', label: 'Réserver un appel', where: 'Hero', sec: 0, p: .10 },
+  { id: 'hero-svc', label: 'Voir les services', where: 'Hero', sec: 0, p: .13 },
+  { id: 'hdr-call', label: 'Réserver un appel', where: 'Header', sec: -1, p: .05 },
+  { id: 'wa-fab', label: 'WhatsApp', where: 'Bouton flottant', sec: -1, p: .11 },
+  { id: 'filter', label: 'Filtre des réalisations', where: 'Réalisations', sec: 2, p: .20 },
+  { id: 'about-call', label: 'Réserver un appel', where: 'À propos', sec: 3, p: .07 },
+  { id: 'about-mail', label: 'Écrire un e-mail', where: 'À propos', sec: 3, p: .04 },
+  { id: 'wa-contact', label: 'Écrire sur WhatsApp', where: 'Contact', sec: 4, p: .09 },
+  { id: 'tel', label: 'Téléphone', where: 'Contact', sec: 4, p: .06 },
+  { id: 'form', label: 'Réserver l’appel', where: 'Formulaire', sec: 4, p: .12 },
+  { id: 'theme', label: 'Changer de thème', where: 'Header', sec: -1, p: .04 },
+];
+const CONTACT = new Set(['wa-fab', 'wa-contact', 'tel', 'about-mail', 'form']);
+const LIVE_KINDS = [['Arrivée sur le site', 'arrive', 30], ['A atteint la section Services', 'scroll', 14], ['A atteint la section Réalisations', 'scroll', 10], ['Clic « WhatsApp »', 'click', 8], ['Clic « Réserver un appel »', 'click', 9], ['Clic « Voir les services »', 'click', 8], ['Formulaire d’appel envoyé', 'click', 4], ['A quitté le site', 'leave', 17]];
+const DOT = { arrive: 'var(--rw-primary)', scroll: 'var(--rw-line-strong)', click: 'var(--rw-copper)', leave: 'var(--rw-text-muted)' };
+const ALL_CITY = 'Toutes les villes', ALL_DEV = 'Tous les appareils', ALL_SRC = 'Toutes les sources', ALL_DUR = 'Toutes les durées';
+const DUR_OPTS = [ALL_DUR, 'Moins de 30 s', '30 s à 2 min', '2 à 5 min', 'Plus de 5 min'];
+const PERIODS = [{ value: 'today', label: 'Aujourd’hui' }, { value: '7j', label: '7 jours' }, { value: '30j', label: '30 jours' }];
+const PERIOD_LABEL = { today: 'aujourd’hui', '7j': '7 derniers jours', '30j': '30 derniers jours' };
+
+function rng(a) { return function () { a |= 0; a = a + 0x6D2B79F5 | 0; let t = Math.imul(a ^ a >>> 15, 1 | a); t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t; return ((t ^ t >>> 14) >>> 0) / 4294967296; }; }
+function pickW(r, arr) { let tot = 0; arr.forEach(x => { tot += x[x.length - 1]; }); let v = r() * tot; for (const x of arr) { v -= x[x.length - 1]; if (v <= 0) return x; } return arr[arr.length - 1]; }
+function makeIp(r, country) { const p = IPP[country]; return p[Math.floor(r() * p.length)] + '.' + (1 + Math.floor(r() * 254)) + '.' + (1 + Math.floor(r() * 254)); }
+const T0 = (() => { const d = new Date(); d.setHours(0, 0, 0, 0); return d.getTime(); })();
+const BMAP = {}; BUTTONS.forEach(b => { BMAP[b.id] = b; });
+const COUNTRY = {}; CITIES.forEach(c => { COUNTRY[c[0]] = c[1]; });
+
+function gen() {
+  const r = rng(20261008), pool = {}, out = [], now = Date.now();
+  let id = 1;
+  for (let d = 59; d >= 0; d--) {
+    const day = T0 - d * DAY, dow = new Date(day).getDay();
+    const n = Math.round((10 + (59 - d) * 0.2) * (dow === 0 ? 0.7 : dow === 6 ? 0.85 : 1) * (0.75 + r() * 0.5));
+    for (let k = 0; k < n; k++) {
+      const start = day + pickW(r, HW)[0] * HOUR + Math.floor(r() * HOUR);
+      const c = pickW(r, CITIES), pl = pool[c[0]] || (pool[c[0]] = []);
+      let ip;
+      if (pl.length > 2 && r() < 0.22) ip = pl[Math.floor(r() * pl.length)]; else { ip = makeIp(r, c[1]); pl.push(ip); }
+      const dv = pickW(r, DEVICES), br = pickW(r, BROWSERS[dv[0]])[0], src = pickW(r, SOURCES)[0], depth = pickW(r, DEPTHS)[0];
+      const dur = Math.max(3, Math.round((7 + depth * 24) * Math.exp((r() - 0.4) * 1.5)));
+      const clicks = BUTTONS.filter(b => (b.sec < 0 || b.sec <= depth) && r() < b.p * (0.7 + depth * 0.1)).map(b => b.id);
+      const seed = Math.floor(r() * 1e9);
+      if (start > now) continue;
+      out.push({ id: id++, start, ip, city: c[0], country: c[1], os: dv[0], device: dv[1], browser: br, src, depth, dur, clicks, seed });
+    }
+  }
+  return out.sort((a, b) => b.start - a.start);
+}
+const DATA = gen();
+const IPC = new Map(); DATA.forEach(s => IPC.set(s.ip, (IPC.get(s.ip) || 0) + 1));
+
+const nf = new Intl.NumberFormat('fr-FR');
+const fmtN = n => nf.format(n);
+const pct = x => Math.round(x) + '\u202f%';
+const f1 = x => x.toFixed(1).replace('.', ',');
+const fmtDur = s => { s = Math.round(s); return s < 60 ? s + ' s' : Math.floor(s / 60) + ' min ' + String(s % 60).padStart(2, '0') + ' s'; };
+const fmtT = s => Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0');
+const fmtDate = ts => { const d = new Date(ts); return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' · ' + d.getHours() + ' h ' + String(d.getMinutes()).padStart(2, '0'); };
+const fmtRel = ts => { const m = Math.round((Date.now() - ts) / 60000); if (m < 1) return 'à l’instant'; if (m < 60) return 'il y a ' + m + ' min'; const h = Math.floor(m / 60); if (h < 24) return 'il y a ' + h + ' h'; return fmtDate(ts); };
+const relS = ts => { const s = (Date.now() - ts) / 1000; if (s < 10) return 'à l’instant'; if (s < 60) return 'il y a ' + Math.round(s) + ' s'; return 'il y a ' + Math.round(s / 60) + ' min'; };
+const niceMax = m => { if (m <= 5) return 5; const p = Math.pow(10, Math.floor(Math.log10(m))), f = m / p; return (f <= 1 ? 1 : f <= 2 ? 2 : f <= 5 ? 5 : 10) * p; };
+
+function timeline(s) {
+  const r = rng(s.seed), n = s.depth + 1, secT = [0], ev = [];
+  for (let i = 1; i <= s.depth; i++) secT.push(Math.round(s.dur * (i / n) * (0.85 + r() * 0.3)));
+  ev.push({ t: 0, kind: 'arrive', text: 'Arrivée sur le site', sub: 'Section Hero · via ' + s.src });
+  for (let i = 1; i <= s.depth; i++) ev.push({ t: secT[i], kind: 'scroll', text: 'Défilement jusqu’à ' + SECTIONS[i], sub: '' });
+  s.clicks.forEach(id => {
+    const b = BMAP[id], sec = b.sec < 0 ? Math.floor(r() * n) : b.sec;
+    const a = secT[sec], z = sec < s.depth ? secT[sec + 1] : s.dur;
+    ev.push({ t: Math.round(a + (z - a) * (0.2 + r() * 0.6)), kind: 'click', text: 'Clic « ' + b.label + ' »', sub: b.where });
+  });
+  ev.push({ t: s.dur, kind: 'leave', text: 'Départ du site', sub: 'Dernière section vue : ' + SECTIONS[s.depth] });
+  return ev.sort((a, b) => a.t - b.t || (a.kind === 'leave' ? 1 : -1));
+}
+
+class Component extends DCLogic {
+  state = { theme: 'light', view: 'overview', period: '7j', hoverBar: null, q: '', fCity: ALL_CITY, fDev: ALL_DEV, fSrc: ALL_SRC, fDur: ALL_DUR, sortKey: 'start', sortDir: -1, page: 0, sel: null, live: [], online: 7, toast: null, tabsKey: 0, narrow: false };
+  evId = 0;
+  goFns = { overview: () => this.go('overview'), visitors: () => this.go('visitors'), clicks: () => this.go('clicks'), behavior: () => this.go('behavior') };
+  sortFns = { start: () => this.sort('start'), dur: () => this.sort('dur'), depth: () => this.sort('depth'), clicks: () => this.sort('clicks') };
+
+  componentDidMount() {
+    this.reduced = !Element.prototype.animate || !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.pulsed = new WeakSet();
+    let t = null;
+    try { t = localStorage.getItem('relwick-theme'); } catch (e) {}
+    const live = DATA.slice(0, 5).map((s, i) => {
+      const c = s.clicks[s.clicks.length - 1];
+      return { id: ++this.evId, ip: s.ip, city: s.city, text: c ? 'Clic « ' + BMAP[c].label + ' »' : 'Arrivée sur le site', kind: c ? 'click' : 'arrive', t: Date.now() - (i * 70 + 25) * 1000 };
+    });
+    this.setState({ theme: t === 'dark' ? 'dark' : 'light', live });
+    this.onResize = () => { const n = window.innerWidth < 960; if (n !== this.state.narrow) this.setState({ narrow: n }); };
+    this.onKey = e => { if (e.key === 'Escape' && this.state.sel != null) this.closeSel(); };
+    window.addEventListener('resize', this.onResize);
+    window.addEventListener('keydown', this.onKey);
+    this.onResize();
+    this.lr = rng(Date.now() % 1e9);
+    this.timer = setInterval(() => this.tick(), 4500);
+    this.remeasure = () => setTimeout(() => this.setState(s => ({ tabsKey: s.tabsKey + 1 })), 60);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(this.remeasure);
+    if (document.readyState === 'complete') this.remeasure(); else window.addEventListener('load', this.remeasure, { once: true });
+    this.remT = setTimeout(this.remeasure, 1200);
+    this.prev = { view: this.state.view, period: this.state.period, sel: null, live: null };
+    this.syncTheme();
+    requestAnimationFrame(() => this.animView());
+  }
+  componentDidUpdate() {
+    this.syncTheme(); this.pulse();
+    const p = this.prev, s = this.state, lid = s.live[0] && s.live[0].id;
+    if (p.view !== s.view) requestAnimationFrame(() => this.animView());
+    else if (p.period !== s.period) requestAnimationFrame(() => this.growBars());
+    if (p.sel == null && s.sel != null) requestAnimationFrame(() => this.animDrawer());
+    if (p.live != null && lid !== p.live) requestAnimationFrame(() => this.animLive());
+    this.prev = { view: s.view, period: s.period, sel: s.sel, live: lid };
+  }
+  componentWillUnmount() {
+    window.removeEventListener('resize', this.onResize);
+    window.removeEventListener('keydown', this.onKey);
+    clearInterval(this.timer); clearTimeout(this.remT); clearTimeout(this.toastT);
+  }
+  syncTheme() { document.documentElement.setAttribute('data-theme', this.state.theme); }
+
+  animView() {
+    if (this.reduced) return;
+    document.querySelectorAll('main [data-anim]').forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(16px)' }, { opacity: 1, transform: 'none' }], { duration: 600, easing: EASE, delay: i * 70, fill: 'backwards' }));
+    this.growBars();
+  }
+  growBars() {
+    if (this.reduced) return;
+    document.querySelectorAll('[data-bar]').forEach((el, i) => el.animate([{ transform: 'scaleY(0)' }, { transform: 'none' }], { duration: 700, easing: EASE, delay: 120 + i * 16, fill: 'backwards' }));
+    document.querySelectorAll('[data-fill]').forEach((el, i) => el.animate([{ transform: 'scaleX(0)' }, { transform: 'none' }], { duration: 800, easing: EASE, delay: 160 + (i % 12) * 30, fill: 'backwards' }));
+  }
+  animDrawer() {
+    if (this.reduced) return;
+    const d = document.querySelector('[data-drawer]'), o = document.querySelector('[data-overlay]');
+    if (d) d.animate([{ transform: 'translateX(48px)', opacity: 0 }, { transform: 'none', opacity: 1 }], { duration: 560, easing: EASE });
+    if (o) o.animate([{ opacity: 0 }, { opacity: 1 }], { duration: 280, easing: EASE });
+    if (d) d.querySelectorAll('[style*="grid-template-columns:44px"]').forEach((el, i) => el.animate([{ opacity: 0, transform: 'translateY(8px)' }, { opacity: 1, transform: 'none' }], { duration: 500, easing: EASE, delay: 200 + i * 50, fill: 'backwards' }));
+  }
+  animLive() {
+    if (this.reduced) return;
+    const el = document.querySelector('[data-live]');
+    if (el) el.animate([{ opacity: 0, transform: 'translateY(-10px)' }, { opacity: 1, transform: 'none' }], { duration: 560, easing: EASE });
+  }
+  pulse() {
+    if (this.reduced) return;
+    document.querySelectorAll('[data-pulse-wrap] .rw-badge__dot').forEach(el => {
+      if (this.pulsed.has(el)) return;
+      this.pulsed.add(el);
+      el.animate([{ boxShadow: '0 0 0 0 rgba(3,151,114,.55)' }, { boxShadow: '0 0 0 6px rgba(3,151,114,0)' }], { duration: 1600, iterations: Infinity, easing: 'ease-out' });
+    });
+  }
+
+  tick() {
+    const r = this.lr, c = pickW(r, CITIES), k = pickW(r, LIVE_KINDS);
+    const ev = { id: ++this.evId, ip: makeIp(r, c[1]), city: c[0], text: k[0], kind: k[1], t: Date.now() };
+    this.setState(s => ({ live: [ev].concat(s.live).slice(0, 6), online: Math.max(2, Math.min(16, s.online + Math.round((r() - 0.5) * 3))) }));
+  }
+  go(view) { this.setState({ view, hoverBar: null }); window.scrollTo(0, 0); }
+  sort(k) { this.setState(s => ({ sortKey: k, sortDir: s.sortKey === k ? -s.sortDir : -1, page: 0 })); }
+  open(id) { this.setState({ sel: id }); }
+  closeSel = () => {
+    const d = document.querySelector('[data-drawer]'), o = document.querySelector('[data-overlay]');
+    if (this.reduced || !d) { this.setState({ sel: null }); return; }
+    d.animate([{ transform: 'none', opacity: 1 }, { transform: 'translateX(48px)', opacity: 0 }], { duration: 220, easing: 'ease-in', fill: 'forwards' });
+    if (o) o.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 220, fill: 'forwards' });
+    setTimeout(() => this.setState({ sel: null }), 200);
+  };
+  showToast(title, desc) {
+    clearTimeout(this.toastT);
+    this.setState({ toast: { title, desc } });
+    this.toastT = setTimeout(() => this.setState({ toast: null }), 4000);
+  }
+  copyIp = () => {
+    const s = DATA.find(x => x.id === this.state.sel);
+    if (!s) return;
+    try { navigator.clipboard && navigator.clipboard.writeText(s.ip); } catch (e) {}
+    this.showToast('Adresse IP copiée', s.ip);
+  };
+  toggleTheme = () => {
+    const theme = this.state.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('relwick-theme', theme); } catch (e) {}
+    this.setState({ theme });
+  };
+  setPeriod = v => this.setState({ period: typeof v === 'string' ? v : '7j', page: 0, hoverBar: null });
+  onQ = e => this.setState({ q: e.target.value, page: 0 });
+  onCity = e => this.setState({ fCity: e.target.value, page: 0 });
+  onDev = e => this.setState({ fDev: e.target.value, page: 0 });
+  onSrc = e => this.setState({ fSrc: e.target.value, page: 0 });
+  onDur = e => this.setState({ fDur: e.target.value, page: 0 });
+  resetFilters = () => this.setState({ q: '', fCity: ALL_CITY, fDev: ALL_DEV, fSrc: ALL_SRC, fDur: ALL_DUR, page: 0 });
+  prevPage = () => this.setState(s => ({ page: Math.max(0, s.page - 1) }));
+  nextPage = () => this.setState(s => ({ page: s.page + 1 }));
+  barLeave = () => { if (this.state.hoverBar != null) this.setState({ hoverBar: null }); };
+
+  range() {
+    const p = this.state.period, now = Date.now();
+    if (p === 'today') return { from: T0, to: now, pf: T0 - DAY, pt: now - DAY };
+    const n = p === '7j' ? 7 : 30;
+    return { from: T0 - (n - 1) * DAY, to: now, pf: T0 - (2 * n - 1) * DAY, pt: T0 - (n - 1) * DAY };
+  }
+  applyFilters(list) {
+    const st = this.state, q = st.q.trim().toLowerCase();
+    return list.filter(s => {
+      if (q && s.ip.indexOf(q) < 0 && s.city.toLowerCase().indexOf(q) < 0) return false;
+      if (st.fCity !== ALL_CITY && s.city !== st.fCity) return false;
+      if (st.fDev !== ALL_DEV && s.device !== st.fDev) return false;
+      if (st.fSrc !== ALL_SRC && s.src !== st.fSrc) return false;
+      if (st.fDur === DUR_OPTS[1] && !(s.dur < 30)) return false;
+      if (st.fDur === DUR_OPTS[2] && !(s.dur >= 30 && s.dur < 120)) return false;
+      if (st.fDur === DUR_OPTS[3] && !(s.dur >= 120 && s.dur < 300)) return false;
+      if (st.fDur === DUR_OPTS[4] && !(s.dur >= 300)) return false;
+      return true;
+    });
+  }
+  exportCsv = () => {
+    const rg = this.range();
+    const rows = this.applyFilters(DATA.filter(s => s.start >= rg.from && s.start < rg.to));
+    const esc = v => '"' + String(v).replace(/"/g, '""') + '"';
+    const head = ['Adresse IP', 'Ville', 'Pays', 'Appareil', 'Système', 'Navigateur', 'Source', 'Arrivée', 'Durée (s)', 'Dernière section', 'Boutons cliqués'];
+    const lines = [head.map(esc).join(';')].concat(rows.map(s => [s.ip, s.city, s.country, s.device, s.os, s.browser, s.src, new Date(s.start).toLocaleString('fr-FR'), s.dur, SECTIONS[s.depth], s.clicks.map(id => BMAP[id].label + ' (' + BMAP[id].where + ')').join(', ')].map(esc).join(';')));
+    try {
+      const blob = new Blob(['\ufeff' + lines.join('\n')], { type: 'text/csv;charset=utf-8' });
+      const a = document.createElement('a');
+      a.href = URL.createObjectURL(blob); a.download = 'relwick-visiteurs-' + this.state.period + '.csv';
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(() => URL.revokeObjectURL(a.href), 2000);
+    } catch (e) {}
+    this.showToast('Export prêt', fmtN(rows.length) + ' visites exportées au format CSV.');
+  };
+
+  renderVals() {
+    const st = this.state, rg = this.range();
+    const cur = DATA.filter(s => s.start >= rg.from && s.start < rg.to);
+    const prv = DATA.filter(s => s.start >= rg.pf && s.start < rg.pt);
+    const N = Math.max(1, cur.length);
+    const uniq = a => new Set(a.map(s => s.ip)).size;
+    const avg = a => a.length ? a.reduce((x, s) => x + s.dur, 0) / a.length : 0;
+    const contacts = a => a.reduce((x, s) => x + s.clicks.filter(id => CONTACT.has(id)).length, 0);
+    const cmp = { today: 'vs hier à la même heure', '7j': 'vs 7 jours précédents', '30j': 'vs 30 jours précédents' }[st.period];
+    const K = (label, icon, a, b, f, invert) => {
+      const d = b ? (a - b) / b * 100 : 0, up = d >= 0;
+      return { label, icon, value: f(a), cmp, delta: (up ? '+' : '−') + Math.abs(Math.round(d)) + '\u202f%', tone: (up !== !!invert) ? 'success' : 'danger' };
+    };
+    const by = (a, f) => { const m = new Map(); a.forEach(s => { const k = f(s); m.set(k, (m.get(k) || 0) + 1); }); return Array.from(m.entries()).sort((x, y) => y[1] - x[1]); };
+    const hl = (entries, sub) => { const m = Math.max(1, ...entries.map(e => e[1])); return entries.map(([k, n]) => ({ name: k, sub: sub ? sub(k, n) : '', n: fmtN(n), w: (n / m * 100) + '%' })); };
+
+    const kpis = [K('Visites totales', 'eye', cur.length, prv.length, fmtN), K('Visiteurs uniques', 'users', uniq(cur), uniq(prv), fmtN), K('Durée moyenne', 'clock', avg(cur), avg(prv), fmtDur), K('Prises de contact', 'phone-call', contacts(cur), contacts(prv), fmtN)];
+
+    const bl = [];
+    if (st.period === 'today') {
+      const nowH = new Date().getHours();
+      for (let h = 0; h < 24; h++) { const a = T0 + h * HOUR; bl.push({ n: cur.filter(s => s.start >= a && s.start < a + HOUR).length, lab: h % 3 === 0 ? h + ' h' : '', full: 'De ' + h + ' h à ' + (h + 1) + ' h', future: h > nowH }); }
+    } else {
+      const nd = st.period === '7j' ? 7 : 30;
+      for (let i = nd - 1; i >= 0; i--) { const a = T0 - i * DAY, d = new Date(a); bl.push({ n: cur.filter(s => s.start >= a && s.start < a + DAY).length, lab: nd === 7 ? DOW[d.getDay()] + ' ' + d.getDate() : (i % 5 === 0 ? d.getDate() + ' ' + MONTHS[d.getMonth()] : ''), full: DOW[d.getDay()] + ' ' + d.getDate() + ' ' + MONTHS[d.getMonth()], future: false }); }
+    }
+    const mx = niceMax(Math.max(1, ...bl.map(b => b.n)));
+    const lastIdx = bl.reduce((li, b, i) => b.future ? li : i, 0);
+    const hb = st.hoverBar != null && st.hoverBar < bl.length && !bl[st.hoverBar].future ? st.hoverBar : null;
+    const bars = bl.map((b, i) => ({
+      h: b.future ? '0%' : Math.max(b.n / mx * 100, 1) + '%',
+      bg: (hb === i || (hb == null && i === lastIdx)) ? 'var(--rw-primary)' : 'var(--indigo-300)',
+      lab: b.lab,
+      enter: () => { if (this.state.hoverBar !== i) this.setState({ hoverBar: i }); },
+    }));
+
+    const clickRows = BUTTONS.map(b => { const ss = cur.filter(s => s.clicks.indexOf(b.id) >= 0); return { b, n: ss.length, u: uniq(ss) }; }).sort((x, y) => y.n - x.n);
+    const cm = Math.max(1, clickRows[0].n);
+    const funnel = SECTIONS.map((name, i) => {
+      const reached = cur.filter(s => s.depth >= i).length, exits = cur.filter(s => s.depth === i).length;
+      return { name, n: pct(reached / N * 100), sub: pct(exits / N * 100) + ' s’arrêtent ici', w: (reached / N * 100) + '%' };
+    });
+    const row = s => ({
+      ip: s.ip, visits: (IPC.get(s.ip) || 1) > 1 ? IPC.get(s.ip) + ' visites' : 'Première visite',
+      city: s.city, country: s.country, dev: s.os, devSub: s.device + ' · ' + s.browser, src: s.src,
+      date: fmtDate(s.start), rel: fmtRel(s.start), dur: fmtDur(s.dur), stop: SECTIONS[s.depth],
+      segs: SECTIONS.map((_, i) => ({ bg: i <= s.depth ? 'var(--rw-primary)' : 'var(--rw-line)' })),
+      clicks: String(s.clicks.length), open: () => this.open(s.id),
+    });
+
+    const fl = this.applyFilters(cur);
+    const sk = st.sortKey, val = s => sk === 'clicks' ? s.clicks.length : s[sk];
+    const sorted = fl.slice().sort((a, b) => (val(a) - val(b)) * st.sortDir || (b.start - a.start));
+    const pages = Math.max(1, Math.ceil(sorted.length / PAGE)), page = Math.min(st.page, pages - 1);
+    const sortIc = {}, sortCol = {};
+    ['start', 'dur', 'depth', 'clicks'].forEach(k => { sortIc[k] = sk === k ? (st.sortDir < 0 ? 'arrow-down' : 'arrow-up') : 'chevrons-up-down'; sortCol[k] = sk === k ? 'var(--rw-text)' : 'var(--rw-text-muted)'; });
+
+    const tc = a => a.reduce((x, s) => x + s.clicks.length, 0);
+    const cpv = a => a.length ? tc(a) / a.length : 0;
+    const wc = a => a.length ? a.filter(s => s.clicks.length).length / a.length * 100 : 0;
+    const depthAvg = a => a.length ? a.reduce((x, s) => x + s.depth + 1, 0) / a.length : 0;
+    const reachC = a => a.length ? a.filter(s => s.depth >= 4).length / a.length * 100 : 0;
+    const heroOut = a => a.length ? a.filter(s => s.depth === 0).length / a.length * 100 : 0;
+    const DB = [['Moins de 10 s', 0, 10], ['10 à 30 s', 10, 30], ['30 s à 1 min', 30, 60], ['1 à 3 min', 60, 180], ['3 à 10 min', 180, 600], ['Plus de 10 min', 600, 1e9]];
+    const durEntries = DB.map(([l, a, z]) => [l, cur.filter(s => s.dur >= a && s.dur < z).length]);
+    const devType = {}; DEVICES.forEach(d => { devType[d[0]] = d[1]; });
+
+    let sel = null;
+    if (st.sel != null) {
+      const s = DATA.find(x => x.id === st.sel);
+      if (s) sel = {
+        ip: s.ip, num: 'Visite n° ' + s.id, place: s.city + ', ' + s.country + ' · ' + fmtRel(s.start),
+        info: [['Ville', s.city], ['Pays', s.country], ['Appareil', s.os + ' · ' + s.device], ['Navigateur', s.browser], ['Source', s.src], ['Arrivée', fmtDate(s.start)], ['Temps passé', fmtDur(s.dur)], ['Visites de cette IP', fmtN(IPC.get(s.ip) || 1)]].map(([k, v]) => ({ k, v })),
+        segs: SECTIONS.map((name, i) => ({ name, bg: i <= s.depth ? 'var(--rw-primary)' : 'var(--rw-surface-sunken)', fg: i === s.depth ? 'var(--rw-text)' : 'var(--rw-text-muted)', w: i === s.depth ? '600' : '400' })),
+        stop: 'S’est arrêté à la section ' + SECTIONS[s.depth] + ', soit ' + Math.round((s.depth + 1) / SECTIONS.length * 100) + '\u202f% de la page.',
+        clickTags: s.clicks.map(id => ({ label: BMAP[id].label + ' · ' + BMAP[id].where })),
+        hasClicks: s.clicks.length > 0, noClicks: s.clicks.length === 0,
+        events: timeline(s).map(e => ({ t: fmtT(e.t), text: e.text, sub: e.sub, dot: DOT[e.kind] })),
+      };
+    }
+
+    const TT = { overview: ['Vue d’ensemble', 'Activité du site'], visitors: ['Visiteurs', 'Chaque visite avec son adresse IP, sa ville et son parcours'], clicks: ['Clics', 'Les boutons sur lesquels vos visiteurs appuient'], behavior: ['Comportement', 'Jusqu’où ils défilent et combien de temps ils restent'] };
+    const NAV = [['overview', 'Vue d’ensemble', 'layout-dashboard'], ['visitors', 'Visiteurs', 'users'], ['clicks', 'Clics', 'mouse-pointer-click'], ['behavior', 'Comportement', 'route']];
+
+    return {
+      theme: st.theme, isLight: st.theme !== 'dark', isDark: st.theme === 'dark', themeIcon: st.theme === 'dark' ? 'sun' : 'moon', toggleTheme: this.toggleTheme,
+      wide: !st.narrow, narrow: st.narrow, tabsKey: 'tabs-' + st.tabsKey,
+      navItems: NAV.map(([k, l, ic]) => ({ label: l, icon: ic, go: this.goFns[k], bg: st.view === k ? 'var(--rw-primary-soft)' : 'transparent', fg: st.view === k ? 'var(--rw-primary-soft-text)' : 'var(--rw-text-muted)', count: k === 'visitors' ? fmtN(cur.length) : '', current: st.view === k ? 'page' : 'false' })),
+      title: TT[st.view][0], subtitle: TT[st.view][1] + ' · ' + PERIOD_LABEL[st.period],
+      onlineLabel: st.online + ' en ligne', periods: PERIODS, period: st.period, setPeriod: this.setPeriod, exportCsv: this.exportCsv,
+      vOverview: st.view === 'overview', vVisitors: st.view === 'visitors', vClicks: st.view === 'clicks', vBehavior: st.view === 'behavior',
+      kpis,
+      chartSub: st.period === 'today' ? 'Par heure, aujourd’hui' : 'Par jour, ' + PERIOD_LABEL[st.period],
+      chartValue: fmtN(hb != null ? bl[hb].n : cur.length) + ' visites',
+      chartLabel: hb != null ? bl[hb].full : 'Total sur la période',
+      gridLines: [{ b: '100%', v: fmtN(mx) }, { b: '50%', v: fmtN(mx / 2) }, { b: '0%', v: '0' }],
+      bars, barGap: st.period === '7j' ? '12px' : '4px', barLeave: this.barLeave,
+      live: st.live.map(e => ({ ip: e.ip, city: e.city, text: e.text, dot: DOT[e.kind], rel: relS(e.t) })),
+      topCities: hl(by(cur, s => s.city).slice(0, 6), k => COUNTRY[k]),
+      topButtons: clickRows.slice(0, 6).map(x => ({ name: x.b.label, sub: x.b.where, n: fmtN(x.n), w: (x.n / cm * 100) + '%' })),
+      funnel, recent: cur.slice(0, 6).map(row), goVisitors: this.goFns.visitors,
+      q: st.q, onQ: this.onQ, fCity: st.fCity, onCity: this.onCity, fDev: st.fDev, onDev: this.onDev, fSrc: st.fSrc, onSrc: this.onSrc, fDur: st.fDur, onDur: this.onDur, resetFilters: this.resetFilters,
+      cityOpts: [ALL_CITY].concat(by(DATA, s => s.city).map(e => e[0])), devOpts: [ALL_DEV, 'Mobile', 'Ordinateur', 'Tablette'], srcOpts: [ALL_SRC].concat(SOURCES.map(x => x[0])), durOpts: DUR_OPTS,
+      resultsLabel: fmtN(fl.length) + ' visites · ' + fmtN(uniq(fl)) + ' adresses IP',
+      rows: sorted.slice(page * PAGE, page * PAGE + PAGE).map(row), noResults: sorted.length === 0,
+      pageLabel: sorted.length ? (page * PAGE + 1) + '–' + Math.min(sorted.length, (page + 1) * PAGE) + ' sur ' + fmtN(sorted.length) : '0 résultat',
+      prevDis: page === 0, nextDis: page >= pages - 1, prevPage: this.prevPage, nextPage: this.nextPage,
+      sortBy: this.sortFns, sortIc, sortCol,
+      clickKpis: [K('Total des clics', 'mouse-pointer-click', tc(cur), tc(prv), fmtN), K('Clics par visite', 'repeat', cpv(cur), cpv(prv), f1), K('Visites avec au moins un clic', 'pointer', wc(cur), wc(prv), pct)],
+      clickTable: clickRows.map((x, i) => ({ rank: String(i + 1).padStart(2, '0'), label: x.b.label, where: x.b.where, n: fmtN(x.n), u: fmtN(x.u), rate: pct(x.n / N * 100), w: (x.n / cm * 100) + '%' })),
+      behKpis: [K('Sections vues en moyenne', 'layers', depthAvg(cur), depthAvg(prv), x => f1(x) + ' sur 6'), K('Ont atteint Contact', 'map-pin', reachC(cur), reachC(prv), pct), K('Partis dès le Hero', 'log-out', heroOut(cur), heroOut(prv), pct, true)],
+      durList: hl(durEntries, (k, n) => pct(n / N * 100)),
+      srcList: hl(by(cur, s => s.src), (k, n) => pct(n / N * 100)),
+      devList: hl(by(cur, s => s.os), (k, n) => devType[k] + ' · ' + pct(n / N * 100)),
+      hasSel: sel != null, sel: sel || {}, closeSel: this.closeSel, copyIp: this.copyIp,
+      hasToast: !!st.toast, toastTitle: st.toast ? st.toast.title : '', toastDesc: st.toast ? st.toast.desc : '',
+    };
+  }
+}
+</script>
+</body>
+</html>

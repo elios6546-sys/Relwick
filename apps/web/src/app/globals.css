@@ -1,0 +1,46 @@
+@import "tailwindcss";
+@import "../styles/tokens/colors.css";
+@import "../styles/tokens/typography.css";
+@import "../styles/tokens/spacing.css";
+@import "../styles/tokens/base.css";
+@import "../styles/tokens/components.css";
+@import "../styles/site.css";
+@import "../styles/admin.css";
+/* Dashboard admin : voir styles/admin.css */
+
+:root {
+  --font-sans: var(--font-instrument-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains-mono), ui-monospace, monospace;
+}
+
+@theme {
+  --color-rw-bg: var(--rw-bg);
+  --color-rw-surface: var(--rw-surface);
+  --color-rw-surface-sunken: var(--rw-surface-sunken);
+  --color-rw-line: var(--rw-line);
+  --color-rw-line-strong: var(--rw-line-strong);
+  --color-rw-text: var(--rw-text);
+  --color-rw-text-muted: var(--rw-text-muted);
+  --color-rw-primary: var(--rw-primary);
+  --color-rw-primary-hover: var(--rw-primary-hover);
+  --color-rw-primary-soft: var(--rw-primary-soft);
+  --color-rw-copper: var(--rw-copper);
+  --color-rw-copper-text: var(--rw-copper-text);
+  --color-rw-success: var(--rw-success);
+  --color-rw-warning: var(--rw-warning);
+  --color-rw-danger: var(--rw-danger);
+  --radius-sm: var(--radius-sm);
+  --radius-md: var(--radius-md);
+  --radius-lg: var(--radius-lg);
+  --radius-leaf: var(--radius-leaf);
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+}

@@ -1,0 +1,232 @@
+{
+ "semantic": {
+  "bg": {
+   "light": "#F9F6F1",
+   "dark": "#0D111E",
+   "usage": "Fond de page. Ivoire en clair, Encre en sombre."
+  },
+  "surface": {
+   "light": "#FFFFFF",
+   "dark": "#151926",
+   "usage": "Cartes, panneaux, champs de saisie, menus."
+  },
+  "surface-sunken": {
+   "light": "#F1ECE4",
+   "dark": "#080A16",
+   "usage": "Zones en retrait : barres latérales, blocs de code, lignes de tableau alternées."
+  },
+  "line": {
+   "light": "#E6E0D7",
+   "dark": "#262B3A",
+   "usage": "Filets et séparateurs de 1 px. Décoratif : ne délimite jamais seul un contrôle."
+  },
+  "line-strong": {
+   "light": "#8F8A80",
+   "dark": "#707482",
+   "usage": "Bordure des champs, cases et boutons secondaires (≥ 3:1 sur bg et surface)."
+  },
+  "text": {
+   "light": "#0D111E",
+   "dark": "#F9F6F1",
+   "usage": "Texte principal, sur bg, surface et surface-sunken."
+  },
+  "text-muted": {
+   "light": "#535766",
+   "dark": "#9498A5",
+   "usage": "Texte secondaire, métadonnées, aides. Sur bg et surface (≥ 6:1)."
+  },
+  "primary": {
+   "light": "#483EFE",
+   "dark": "#5250FE",
+   "usage": "Indigo Relwick. Remplissage de l'action principale, une seule par écran. Texte dessus : on-primary."
+  },
+  "primary-hover": {
+   "light": "#3A30D3",
+   "dark": "#483EFE",
+   "usage": "Survol et état pressé de primary."
+  },
+  "on-primary": {
+   "light": "#FFFFFF",
+   "dark": "#FFFFFF",
+   "usage": "Texte et icônes posés sur primary (6,2:1 clair, 5,3:1 sombre)."
+  },
+  "link": {
+   "light": "#483EFE",
+   "dark": "#8D90FF",
+   "usage": "Liens et texte indigo, sur bg et surface."
+  },
+  "primary-soft": {
+   "light": "#E3E6FF",
+   "dark": "#1E1B6C",
+   "usage": "Fond teinté des tags et sélections. Texte dessus : primary-soft-text."
+  },
+  "primary-soft-text": {
+   "light": "#3A30D3",
+   "dark": "#ADB3FF",
+   "usage": "Texte sur primary-soft."
+  },
+  "copper": {
+   "light": "#C6782E",
+   "dark": "#DC9659",
+   "usage": "Cuivre. Accent graphique (éclat du logo, filet de mise en avant, point de donnée clé). Jamais un fond de bouton, jamais du texte courant."
+  },
+  "copper-text": {
+   "light": "#894C06",
+   "dark": "#EAB489",
+   "usage": "Cuivre lisible en texte : chiffres ou mots mis en avant, avec parcimonie."
+  },
+  "copper-soft": {
+   "light": "#F8E8DB",
+   "dark": "#2E1602",
+   "usage": "Fond teinté cuivre, derrière copper-text uniquement."
+  },
+  "success": {
+   "light": "#00654B",
+   "dark": "#46B591",
+   "usage": "Malachite. Succès, en ligne, payé. Texte et icônes sur bg, surface et success-soft."
+  },
+  "success-soft": {
+   "light": "#D3F0E3",
+   "dark": "#003525",
+   "usage": "Fond des messages et badges de succès."
+  },
+  "warning": {
+   "light": "#816002",
+   "dark": "#E0AB22",
+   "usage": "Avertissement, en attente. Texte sur bg, surface et warning-soft."
+  },
+  "warning-soft": {
+   "light": "#FBE9C6",
+   "dark": "#493400",
+   "usage": "Fond des messages et badges d'avertissement."
+  },
+  "danger": {
+   "light": "#C9222B",
+   "dark": "#F2716A",
+   "usage": "Erreur, suppression, échec de paiement. Texte sur bg, surface et danger-soft."
+  },
+  "danger-soft": {
+   "light": "#FDE9E7",
+   "dark": "#590A0E",
+   "usage": "Fond des messages et badges d'erreur."
+  },
+  "focus": {
+   "light": "#483EFE",
+   "dark": "#8D90FF",
+   "usage": "Anneau de focus clavier (2 px, décalé de 2 px)."
+  },
+  "logo-indigo": {
+   "light": "#483EFE",
+   "dark": "#6E6AFF",
+   "usage": "Pièce indigo du symbole. Clair : indigo-600 ; sombre : indigo-500."
+  },
+  "logo-copper": {
+   "light": "#C6782E",
+   "dark": "#DC9659",
+   "usage": "Éclat cuivre du symbole. Clair : copper-500 ; sombre : copper-400."
+  }
+ },
+ "palette": {
+  "indigo": {
+   "50": "#F3F4FF",
+   "100": "#E3E6FF",
+   "200": "#CBD0FE",
+   "300": "#ADB3FF",
+   "400": "#8D90FF",
+   "500": "#6E6AFF",
+   "600": "#483EFE",
+   "700": "#3A30D3",
+   "800": "#2C259E",
+   "900": "#1E1B6C",
+   "950": "#110E42"
+  },
+  "copper": {
+   "50": "#FCF3ED",
+   "100": "#F8E8DB",
+   "200": "#F1D0B7",
+   "300": "#EAB489",
+   "400": "#DC9659",
+   "500": "#C6782E",
+   "600": "#A86012",
+   "700": "#894C06",
+   "800": "#6A3A06",
+   "900": "#4C2905",
+   "950": "#2E1602"
+  },
+  "ink": {
+   "50": "#F5F7FB",
+   "100": "#E9EBF1",
+   "200": "#D6D9E1",
+   "300": "#BABDC8",
+   "400": "#9498A5",
+   "500": "#707482",
+   "600": "#535766",
+   "700": "#3B3F4E",
+   "800": "#262B3A",
+   "900": "#151926",
+   "950": "#0D111E",
+   "975": "#080A16"
+  },
+  "ivory": "#F9F6F1",
+  "malachite": {
+   "50": "#ECF9F3",
+   "100": "#D3F0E3",
+   "200": "#AFE2CD",
+   "300": "#7ECDB0",
+   "400": "#46B591",
+   "500": "#039772",
+   "600": "#007C5D",
+   "700": "#00654B",
+   "800": "#004C38",
+   "900": "#003525",
+   "950": "#001F14"
+  },
+  "amber": {
+   "50": "#FBF4E6",
+   "100": "#FBE9C6",
+   "200": "#F6D795",
+   "300": "#EEC05B",
+   "400": "#E0AB22",
+   "500": "#C79603",
+   "600": "#A17904",
+   "700": "#816002",
+   "800": "#624800",
+   "900": "#493400",
+   "950": "#2E1F00"
+  },
+  "red": {
+   "50": "#FEF2F1",
+   "100": "#FFDFDC",
+   "200": "#FEC4BE",
+   "300": "#F99E97",
+   "400": "#F2716A",
+   "500": "#E64343",
+   "600": "#C9222B",
+   "700": "#A21921",
+   "800": "#7C1117",
+   "900": "#590A0E",
+   "950": "#370406"
+  }
+ },
+ "font": {
+  "sans": "Instrument Sans",
+  "mono": "JetBrains Mono"
+ },
+ "space": {
+  "space-1": "4px",
+  "space-2": "8px",
+  "space-3": "12px",
+  "space-4": "16px",
+  "space-6": "24px",
+  "space-8": "32px",
+  "space-12": "48px",
+  "space-24": "96px"
+ },
+ "radius": {
+  "radius-sm": "6px",
+  "radius-md": "10px",
+  "radius-lg": "16px",
+  "radius-leaf": "32px",
+  "radius-full": "9999px"
+ }
+}

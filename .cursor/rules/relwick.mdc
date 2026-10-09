@@ -1,0 +1,15 @@
+---
+description: Règles du projet Relwick
+alwaysApply: true
+---
+- Le cahier des charges de référence est RELWICK.md à la racine. En cas de doute, il fait foi.
+- Ne jamais modifier les dossiers de design existants (« Landing page agence web », Relwick_Identite_v2, Landing Relwick.pdf).
+- TypeScript strict partout, aucun `any` implicite. Types partagés dans packages/shared.
+- Textes d'interface en français, vouvoiement, sans emoji, typographie française.
+- Couleurs uniquement via les variables CSS --rw-* et les palettes des tokens. Aucun code hexadécimal en dur dans les composants. Aucun dégradé.
+- Une seule action principale (bouton indigo plein) par écran.
+- Logo toujours via les SVG de public/brand, jamais retapé dans une police.
+- Accessibilité : focus visible, contrastes AA, labels sur tous les champs, navigation clavier, prefers-reduced-motion respecté.
+- API : DTO validés avec class-validator, SQL brut uniquement via Prisma.sql paramétré, aucune donnée de formulaire dans les événements du traceur.
+- Dates stockées en UTC, affichées en Africa/Lubumbashi.
+- Après chaque modification : pnpm lint, pnpm typecheck et les tests concernés doivent passer.

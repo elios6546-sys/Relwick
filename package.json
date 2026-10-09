@@ -1,0 +1,26 @@
+{
+  "name": "relwick",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Relwick — site vitrine, mesure d'audience et dashboard",
+  "packageManager": "pnpm@9.15.0",
+  "scripts": {
+    "dev": "pnpm --filter @relwick/shared build && pnpm --parallel --filter @relwick/web --filter @relwick/api dev",
+    "build": "pnpm --filter @relwick/shared build && pnpm --filter @relwick/api build && pnpm --filter @relwick/web build",
+    "postinstall": "pnpm --filter @relwick/shared build",
+    "lint": "pnpm -r lint",
+    "typecheck": "pnpm -r typecheck",
+    "test": "pnpm -r test",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md,css}\"",
+    "db:migrate": "pnpm --filter @relwick/api db:migrate",
+    "db:seed": "pnpm --filter @relwick/api db:seed",
+    "db:seed:demo": "pnpm --filter @relwick/api db:seed:demo",
+    "db:clear-demo": "pnpm --filter @relwick/api db:clear-demo",
+    "db:studio": "pnpm --filter @relwick/api db:studio",
+    "geo:check": "pnpm --filter @relwick/api geo:check"
+  },
+  "devDependencies": {
+    "prettier": "^3.5.3",
+    "typescript": "^5.8.2"
+  }
+}

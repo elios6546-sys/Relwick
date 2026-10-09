@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<title>Relwick — Sites web et applications à Kolwezi</title>
+<link rel="icon" href="assets/relwick-favicon.svg">
+<link rel="stylesheet" href="_ds/relwick-design-system-7a933f2f-b2f0-490f-ac6d-b696d4792dd1/styles.css">
+<script src="_ds/relwick-design-system-7a933f2f-b2f0-490f-ac6d-b696d4792dd1/_ds_bundle.js"></script>
+<script src="./image-slot.js"></script>
+<style>html{scroll-behavior:smooth}body{margin:0;background:var(--rw-bg);color:var(--rw-text);font:var(--text-body)}a{color:var(--rw-link)}a:hover{color:var(--rw-primary-hover)}@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}</style>
+</helmet>
+<div data-theme="{{ theme }}" style="min-height:100vh;background:var(--rw-bg);color:var(--rw-text);font-family:var(--font-sans);transition:background 560ms cubic-bezier(.16,1,.3,1),color 560ms cubic-bezier(.16,1,.3,1)">
+
+<header data-screen-label="Header" style="position:sticky;top:0;z-index:50;background:{{ hdBg }};backdrop-filter:{{ hdBlur }};box-shadow:{{ hdShadow }};transition:background 280ms cubic-bezier(.16,1,.3,1),box-shadow 280ms cubic-bezier(.16,1,.3,1)">
+  <div style="max-width:1200px;margin:0 auto;padding:0 var(--gutter);height:72px;display:flex;align-items:center;gap:32px">
+    <a href="#accueil" aria-label="relwick — accueil" style="display:flex;align-items:center;flex:none">
+      <sc-if value="{{ isLight }}" hint-placeholder-val="{{ true }}"><img src="assets/relwick-logo.svg" alt="relwick" style="height:26px;display:block"></sc-if>
+      <sc-if value="{{ isDark }}" hint-placeholder-val="{{ false }}"><img src="assets/relwick-logo-on-dark.svg" alt="relwick" style="height:26px;display:block"></sc-if>
+    </a>
+    <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+      <nav style="display:flex;gap:4px;margin:0 auto">
+        <a href="#services" style="padding:8px 12px;font:500 15px var(--font-sans);color:var(--rw-text-muted);text-decoration:none;transition:color 160ms" style-hover="color:var(--rw-text);text-decoration:underline;text-decoration-color:var(--rw-primary);text-decoration-thickness:2px;text-underline-offset:10px">Services</a>
+        <a href="#realisations" style="padding:8px 12px;font:500 15px var(--font-sans);color:var(--rw-text-muted);text-decoration:none;transition:color 160ms" style-hover="color:var(--rw-text);text-decoration:underline;text-decoration-color:var(--rw-primary);text-decoration-thickness:2px;text-underline-offset:10px">Réalisations</a>
+        <a href="#apropos" style="padding:8px 12px;font:500 15px var(--font-sans);color:var(--rw-text-muted);text-decoration:none;transition:color 160ms" style-hover="color:var(--rw-text);text-decoration:underline;text-decoration-color:var(--rw-primary);text-decoration-thickness:2px;text-underline-offset:10px">À propos</a>
+        <a href="#contact" style="padding:8px 12px;font:500 15px var(--font-sans);color:var(--rw-text-muted);text-decoration:none;transition:color 160ms" style-hover="color:var(--rw-text);text-decoration:underline;text-decoration-color:var(--rw-primary);text-decoration-thickness:2px;text-underline-offset:10px">Contact</a>
+      </nav>
+    </sc-if>
+    <div style="display:flex;gap:8px;align-items:center;margin-left:auto">
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.IconButton" icon="{{ themeIcon }}" label="Changer de thème" variant="ghost" onClick="{{ toggleTheme }}" hint-size="40px,40px"></x-import>
+      <sc-if value="{{ wide }}" hint-placeholder-val="{{ true }}">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="sm" arrow="{{ true }}" href="#contact" hint-size="164px,32px">Réserver un appel</x-import>
+      </sc-if>
+      <sc-if value="{{ narrow }}" hint-placeholder-val="{{ false }}">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.IconButton" icon="{{ menuIcon }}" label="Menu" variant="ghost" onClick="{{ toggleMenu }}" hint-size="40px,40px"></x-import>
+      </sc-if>
+    </div>
+  </div>
+  <sc-if value="{{ showMobileMenu }}" hint-placeholder-val="{{ false }}">
+    <nav data-mnav="" style="position:absolute;top:72px;left:0;right:0;background:var(--rw-bg);padding:8px var(--gutter) 24px;box-shadow:0 1px 0 var(--rw-line);display:flex;flex-direction:column">
+      <a href="#services" onClick="{{ closeMenu }}" style="padding:14px 0;font:500 18px var(--font-sans);color:var(--rw-text);text-decoration:none;border-bottom:1px solid var(--rw-line)">Services</a>
+      <a href="#realisations" onClick="{{ closeMenu }}" style="padding:14px 0;font:500 18px var(--font-sans);color:var(--rw-text);text-decoration:none;border-bottom:1px solid var(--rw-line)">Réalisations</a>
+      <a href="#apropos" onClick="{{ closeMenu }}" style="padding:14px 0;font:500 18px var(--font-sans);color:var(--rw-text);text-decoration:none;border-bottom:1px solid var(--rw-line)">À propos</a>
+      <a href="#contact" onClick="{{ closeMenu }}" style="padding:14px 0;font:500 18px var(--font-sans);color:var(--rw-text);text-decoration:none;border-bottom:1px solid var(--rw-line)">Contact</a>
+      <div style="display:flex;padding-top:20px" onClick="{{ closeMenu }}">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" arrow="{{ true }}" href="#contact" hint-size="220px,48px">Réserver un appel</x-import>
+      </div>
+    </nav>
+  </sc-if>
+</header>
+
+<sc-if value="{{ heroPanel }}" hint-placeholder-val="{{ true }}">
+<section id="accueil" data-screen-label="Hero — panneau" style="position:relative;min-height:clamp(640px,calc(100vh - 72px),900px);display:flex;align-items:flex-end;padding:220px 0 clamp(24px,5vw,56px);overflow:hidden;scroll-margin-top:72px">
+  <img data-parallax="" data-kb="" src="assets/hero-montagnes.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block">
+  <div style="position:relative;width:100%;max-width:1200px;margin:0 auto;padding:0 var(--gutter)">
+    <div data-theme="dark" style="position:relative;max-width:760px;color:var(--rw-text);border-radius:32px 0;padding:clamp(28px,4.4vw,56px) clamp(24px,4.4vw,56px) clamp(28px,4vw,48px)">
+      <sc-if value="{{ heroGlass }}" hint-placeholder-val="{{ true }}">
+        <div data-hero-glass="" aria-hidden="true" style="position:absolute;inset:0;border-radius:32px 0;background:rgba(13,17,30,.32);backdrop-filter:blur(8px) saturate(140%);border:1px solid rgba(249,246,241,.26);box-shadow:inset 0 1px 0 rgba(249,246,241,.38),inset 1px 0 0 rgba(249,246,241,.14),inset 0 -1px 0 rgba(249,246,241,.08),0 24px 56px rgba(13,17,30,.22)"></div>
+      </sc-if>
+      <div style="position:relative;text-shadow:0 1px 2px rgba(13,17,30,.3),0 2px 28px rgba(13,17,30,.35)">
+      <span data-hero-fade="0" style="display:inline-block;font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);margin-bottom:20px">Agence web &amp; mobile · Kolwezi</span>
+      <h1 style="font:500 clamp(40px,5.6vw,76px)/1.04 var(--font-sans);letter-spacing:-0.035em;margin:0 0 24px;text-wrap:balance"><span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">Votre</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">site,</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">vos</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">applications.</span></span> <span style="color:var(--rw-link)"><span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">Bien</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">faits.</span></span></span></h1>
+      <p data-hero-fade="560" style="font-size:var(--fs-lead);line-height:1.5;color:var(--rw-text);margin:0 0 32px;max-width:560px;text-wrap:pretty">Nous créons des sites web et des applications Android, iOS et PC pour les particuliers. Un seul interlocuteur, de la maquette à la mise en ligne.</p>
+      <div data-hero-fade="680" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center;text-shadow:none">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" arrow="{{ true }}" href="#contact" hint-size="214px,48px">Réserver un appel</x-import>
+        <sc-if value="{{ showSecondary }}" hint-placeholder-val="{{ true }}">
+          <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" variant="secondary" href="#services" hint-size="180px,48px">Voir les services</x-import>
+        </sc-if>
+      </div>
+      <p data-hero-fade="800" style="display:flex;align-items:center;gap:8px;margin:24px 0 0;font-size:14px;color:var(--rw-text-muted)">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="phone-call" size="{{ 16 }}" style="color:var(--rw-link)" hint-size="16px,16px"></x-import>
+        <span style="color:var(--rw-text)">Premier appel gratuit de 30 minutes, sans engagement.</span>
+      </p>
+      </div>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ heroFull }}" hint-placeholder-val="{{ false }}">
+<section id="accueil" data-screen-label="Hero — plein cadre" style="position:relative;min-height:clamp(640px,calc(100vh - 72px),900px);display:flex;align-items:flex-end;padding:200px 0 clamp(48px,8vh,96px);overflow:hidden;background:var(--ink-950);scroll-margin-top:72px">
+  <img data-parallax="" data-kb="" src="assets/hero-montagnes.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:center 42%;display:block">
+  <div style="position:absolute;inset:0;background:rgba(13,17,30,.5)"></div>
+  <div data-theme="dark" style="position:relative;width:100%;max-width:1200px;margin:0 auto;padding:0 var(--gutter);color:var(--rw-text)">
+    <div style="max-width:820px">
+      <span data-hero-fade="0" style="display:inline-block;font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);margin-bottom:20px">Agence web &amp; mobile · Kolwezi</span>
+      <h1 style="font:500 clamp(44px,6.4vw,88px)/1.04 var(--font-sans);letter-spacing:-0.035em;margin:0 0 24px;text-wrap:balance"><span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">Votre</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">site,</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">vos</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">applications.</span></span> <span style="color:var(--rw-link)"><span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">Bien</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">faits.</span></span></span></h1>
+      <p data-hero-fade="560" style="font-size:var(--fs-lead);line-height:1.5;color:var(--rw-text);margin:0 0 32px;max-width:580px;text-wrap:pretty">Nous créons des sites web et des applications Android, iOS et PC pour les particuliers. Un seul interlocuteur, de la maquette à la mise en ligne.</p>
+      <div data-hero-fade="680" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" arrow="{{ true }}" href="#contact" hint-size="214px,48px">Réserver un appel</x-import>
+        <sc-if value="{{ showSecondary }}" hint-placeholder-val="{{ true }}">
+          <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" variant="secondary" href="#services" hint-size="180px,48px">Voir les services</x-import>
+        </sc-if>
+      </div>
+      <p data-hero-fade="800" style="display:flex;align-items:center;gap:8px;margin:24px 0 0;font-size:14px;color:var(--rw-text)">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="phone-call" size="{{ 16 }}" style="color:var(--rw-link)" hint-size="16px,16px"></x-import>
+        <span>Premier appel gratuit de 30 minutes, sans engagement.</span>
+      </p>
+    </div>
+  </div>
+</section>
+</sc-if>
+
+<sc-if value="{{ heroLeaf }}" hint-placeholder-val="{{ false }}">
+<section id="accueil" data-screen-label="Hero — feuille" style="max-width:1200px;margin:0 auto;padding:clamp(40px,7vw,88px) var(--gutter) 0;scroll-margin-top:72px">
+  <span data-hero-fade="0" style="display:inline-block;font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);margin-bottom:20px">Agence web &amp; mobile · Kolwezi</span>
+  <h1 style="font:var(--text-display);letter-spacing:var(--ls-display);margin:0 0 32px;max-width:980px;text-wrap:balance"><span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">Votre</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">site,</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">vos</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">applications.</span></span> <span style="color:var(--rw-primary)"><span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">Bien</span></span> <span style="display:inline-block;overflow:hidden;vertical-align:top;padding-bottom:.12em;margin-bottom:-.12em"><span data-word="" style="display:inline-block">faits.</span></span></span></h1>
+  <div style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px">
+    <p data-hero-fade="560" style="font-size:var(--fs-lead);line-height:1.5;color:var(--rw-text-muted);margin:0;max-width:540px;text-wrap:pretty">Nous créons des sites web et des applications Android, iOS et PC pour les particuliers. Un seul interlocuteur, de la maquette à la mise en ligne.</p>
+    <div data-hero-fade="680" style="display:flex;flex-wrap:wrap;gap:12px;align-items:center">
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" arrow="{{ true }}" href="#contact" hint-size="214px,48px">Réserver un appel</x-import>
+      <sc-if value="{{ showSecondary }}" hint-placeholder-val="{{ true }}">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" variant="secondary" href="#services" hint-size="180px,48px">Voir les services</x-import>
+      </sc-if>
+    </div>
+  </div>
+  <div data-hero-fade="760" style="position:relative;margin-top:clamp(40px,6vw,64px);border-radius:32px 0;overflow:hidden;height:clamp(320px,46vw,600px);background:var(--indigo-100)">
+    <img data-kb="" src="assets/hero-montagnes.jpg" alt="" style="width:100%;height:100%;object-fit:cover;object-position:center 45%;display:block">
+  </div>
+</section>
+</sc-if>
+
+<section id="services" data-screen-label="Services" style="max-width:1200px;margin:0 auto;padding:96px var(--gutter) 48px;scroll-margin-top:72px">
+  <div data-rv="0" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:16px 48px;margin-bottom:40px">
+    <div>
+      <span style="display:inline-block;font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);margin-bottom:16px">Services</span>
+      <h2 style="font:var(--text-h2);letter-spacing:var(--ls-heading);margin:0;max-width:640px;text-wrap:balance">Quatre plateformes, <span style="color:var(--rw-primary)">un seul interlocuteur.</span></h2>
+    </div>
+    <p style="margin:0;max-width:420px;color:var(--rw-text-muted);text-wrap:pretty">Vous expliquez votre idée, nous nous occupons du reste : conception, développement, publication et suivi.</p>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,250px),1fr));gap:20px">
+
+    <div data-rv="0" data-hover="svc" style="background:var(--rw-surface);border:1px solid var(--rw-line);border-radius:10px;padding:28px;display:flex;flex-direction:column;min-height:300px;transition:transform 280ms cubic-bezier(.16,1,.3,1),box-shadow 280ms cubic-bezier(.16,1,.3,1),border-color 280ms cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-4px);box-shadow:var(--shadow-3);border-color:transparent">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <span data-ic="" style="display:grid;place-items:center;width:48px;height:48px;border-radius:10px;background:var(--rw-primary-soft);color:var(--rw-primary-soft-text)"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="monitor" size="{{ 24 }}" hint-size="24px,24px"></x-import></span>
+        <span style="font:500 13px var(--font-mono);color:var(--rw-copper-text)">01</span>
+      </div>
+      <h3 style="font:600 20px/1.25 var(--font-sans);letter-spacing:-0.01em;margin:24px 0 8px">Sites web</h3>
+      <p style="margin:0 0 24px;color:var(--rw-text-muted);text-wrap:pretty">Site vitrine, portfolio, blog ou boutique en ligne. Rapide, lisible sur téléphone et facile à mettre à jour vous-même.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
+        <span style="display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:var(--rw-surface-sunken);font:500 13px/1 var(--font-sans)">Vitrine</span>
+        <span style="display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:var(--rw-surface-sunken);font:500 13px/1 var(--font-sans)">Boutique</span>
+        <span style="display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:var(--rw-surface-sunken);font:500 13px/1 var(--font-sans)">Portfolio</span>
+      </div>
+    </div>
+
+    <div data-rv="90" data-hover="svc" style="background:var(--rw-surface);border:1px solid var(--rw-line);border-radius:10px;padding:28px;display:flex;flex-direction:column;min-height:300px;transition:transform 280ms cubic-bezier(.16,1,.3,1),box-shadow 280ms cubic-bezier(.16,1,.3,1),border-color 280ms cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-4px);box-shadow:var(--shadow-3);border-color:transparent">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <span data-ic="" style="display:grid;place-items:center;width:48px;height:48px;border-radius:10px;background:var(--rw-primary-soft);color:var(--rw-primary-soft-text)"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="smartphone" size="{{ 24 }}" hint-size="24px,24px"></x-import></span>
+        <span style="font:500 13px var(--font-mono);color:var(--rw-copper-text)">02</span>
+      </div>
+      <h3 style="font:600 20px/1.25 var(--font-sans);letter-spacing:-0.01em;margin:24px 0 8px">Applications Android</h3>
+      <p style="margin:0 0 24px;color:var(--rw-text-muted);text-wrap:pretty">Votre application conçue pour les téléphones Android et publiée sur le Google Play Store.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
+        <span style="display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:var(--rw-surface-sunken);font:500 13px/1 var(--font-sans)">Google Play</span>
+      </div>
+    </div>
+
+    <div data-rv="180" data-hover="svc" style="background:var(--rw-surface);border:1px solid var(--rw-line);border-radius:10px;padding:28px;display:flex;flex-direction:column;min-height:300px;transition:transform 280ms cubic-bezier(.16,1,.3,1),box-shadow 280ms cubic-bezier(.16,1,.3,1),border-color 280ms cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-4px);box-shadow:var(--shadow-3);border-color:transparent">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <span data-ic="" style="display:grid;place-items:center;width:48px;height:48px;border-radius:10px;background:var(--rw-primary-soft);color:var(--rw-primary-soft-text)"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="apple" size="{{ 24 }}" hint-size="24px,24px"></x-import></span>
+        <span style="font:500 13px var(--font-mono);color:var(--rw-copper-text)">03</span>
+      </div>
+      <h3 style="font:600 20px/1.25 var(--font-sans);letter-spacing:-0.01em;margin:24px 0 8px">Applications iOS</h3>
+      <p style="margin:0 0 24px;color:var(--rw-text-muted);text-wrap:pretty">La même application sur iPhone et iPad, publiée sur l’App Store après validation par Apple.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
+        <span style="display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:var(--rw-surface-sunken);font:500 13px/1 var(--font-sans)">App Store</span>
+      </div>
+    </div>
+
+    <div data-rv="270" data-hover="svc" style="background:var(--rw-surface);border:1px solid var(--rw-line);border-radius:10px;padding:28px;display:flex;flex-direction:column;min-height:300px;transition:transform 280ms cubic-bezier(.16,1,.3,1),box-shadow 280ms cubic-bezier(.16,1,.3,1),border-color 280ms cubic-bezier(.16,1,.3,1)" style-hover="transform:translateY(-4px);box-shadow:var(--shadow-3);border-color:transparent">
+      <div style="display:flex;justify-content:space-between;align-items:flex-start">
+        <span data-ic="" style="display:grid;place-items:center;width:48px;height:48px;border-radius:10px;background:var(--rw-primary-soft);color:var(--rw-primary-soft-text)"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="laptop" size="{{ 24 }}" hint-size="24px,24px"></x-import></span>
+        <span style="font:500 13px var(--font-mono);color:var(--rw-copper-text)">04</span>
+      </div>
+      <h3 style="font:600 20px/1.25 var(--font-sans);letter-spacing:-0.01em;margin:24px 0 8px">Logiciels PC</h3>
+      <p style="margin:0 0 24px;color:var(--rw-text-muted);text-wrap:pretty">Logiciels de bureau pour Windows, macOS et Linux : gestion, caisse, outils sur mesure.</p>
+      <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:auto">
+        <span style="display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:var(--rw-surface-sunken);font:500 13px/1 var(--font-sans)">Windows</span>
+        <span style="display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:var(--rw-surface-sunken);font:500 13px/1 var(--font-sans)">macOS</span>
+        <span style="display:inline-flex;align-items:center;height:28px;padding:0 10px;border-radius:6px;background:var(--rw-surface-sunken);font:500 13px/1 var(--font-sans)">Linux</span>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<section id="realisations" data-screen-label="Réalisations" style="max-width:1200px;margin:0 auto;padding:48px var(--gutter);scroll-margin-top:72px">
+  <div data-rv="0" style="display:flex;flex-wrap:wrap;justify-content:space-between;align-items:flex-end;gap:24px 48px;margin-bottom:40px">
+    <div>
+      <span style="display:inline-block;font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);margin-bottom:16px">Réalisations</span>
+      <h2 style="font:var(--text-h2);letter-spacing:var(--ls-heading);margin:0;text-wrap:balance">Quelques projets <span style="color:var(--rw-primary)">réalisés.</span></h2>
+    </div>
+    <div style="position:relative;display:inline-flex;max-width:100%;overflow:hidden;border-radius:10px">
+      <x-import key="{{ tabsKey }}" component-from-global-scope="RelwickDesignSystem_7a933f.Tabs" variant="pill" items="{{ tabItems }}" value="{{ cat }}" onChange="{{ setCat }}" hint-size="380px,42px"></x-import>
+    </div>
+  </div>
+  <div data-rv="120" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,320px),1fr));gap:40px 24px">
+    <sc-if value="{{ showWeb }}" hint-placeholder-val="{{ true }}">
+      <article data-work="" data-hover="work" style="display:flex;flex-direction:column;gap:16px;cursor:pointer">
+        <div data-w-img="" style="position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:var(--indigo-100)">
+          <div data-w-zoom="" style="position:absolute;inset:0">
+            <image-slot id="realisation-1" shape="rect" placeholder="Capture d’écran du projet"></image-slot>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <h3 style="font:600 17px/1.3 var(--font-sans);margin:0">Site vitrine pour un restaurant</h3>
+            <p style="margin:0;font-size:14px;color:var(--rw-text-muted)">Menu en ligne et réservation de table</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Tag" tone="neutral" hint-size="72px,28px">Site web</x-import></div>
+          </div>
+          <span data-w-go="" style="flex:none;display:inline-flex;color:var(--rw-text-muted);padding-top:2px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="arrow-up-right" size="{{ 20 }}" hint-size="20px,20px"></x-import></span>
+        </div>
+      </article>
+    </sc-if>
+    <sc-if value="{{ showMobile }}" hint-placeholder-val="{{ true }}">
+      <article data-work="" data-hover="work" style="display:flex;flex-direction:column;gap:16px;cursor:pointer">
+        <div data-w-img="" style="position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:var(--copper-100)">
+          <div data-w-zoom="" style="position:absolute;inset:0">
+            <image-slot id="realisation-2" shape="rect" placeholder="Capture d’écran du projet"></image-slot>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <h3 style="font:600 17px/1.3 var(--font-sans);margin:0">Application de livraison</h3>
+            <p style="margin:0;font-size:14px;color:var(--rw-text-muted)">Commandes et suivi de livraison</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Tag" tone="neutral" hint-size="72px,28px">Android</x-import><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Tag" tone="neutral" hint-size="72px,28px">iOS</x-import></div>
+          </div>
+          <span data-w-go="" style="flex:none;display:inline-flex;color:var(--rw-text-muted);padding-top:2px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="arrow-up-right" size="{{ 20 }}" hint-size="20px,20px"></x-import></span>
+        </div>
+      </article>
+    </sc-if>
+    <sc-if value="{{ showPc }}" hint-placeholder-val="{{ true }}">
+      <article data-work="" data-hover="work" style="display:flex;flex-direction:column;gap:16px;cursor:pointer">
+        <div data-w-img="" style="position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:var(--ink-100)">
+          <div data-w-zoom="" style="position:absolute;inset:0">
+            <image-slot id="realisation-3" shape="rect" placeholder="Capture d’écran du projet"></image-slot>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <h3 style="font:600 17px/1.3 var(--font-sans);margin:0">Logiciel de gestion de stock</h3>
+            <p style="margin:0;font-size:14px;color:var(--rw-text-muted)">Inventaire, ventes et factures</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Tag" tone="neutral" hint-size="72px,28px">Windows</x-import></div>
+          </div>
+          <span data-w-go="" style="flex:none;display:inline-flex;color:var(--rw-text-muted);padding-top:2px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="arrow-up-right" size="{{ 20 }}" hint-size="20px,20px"></x-import></span>
+        </div>
+      </article>
+    </sc-if>
+    <sc-if value="{{ showWeb }}" hint-placeholder-val="{{ true }}">
+      <article data-work="" data-hover="work" style="display:flex;flex-direction:column;gap:16px;cursor:pointer">
+        <div data-w-img="" style="position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:var(--indigo-200)">
+          <div data-w-zoom="" style="position:absolute;inset:0">
+            <image-slot id="realisation-4" shape="rect" placeholder="Capture d’écran du projet"></image-slot>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <h3 style="font:600 17px/1.3 var(--font-sans);margin:0">Boutique en ligne</h3>
+            <p style="margin:0;font-size:14px;color:var(--rw-text-muted)">Catalogue, panier et paiement en ligne</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Tag" tone="neutral" hint-size="72px,28px">Site web</x-import></div>
+          </div>
+          <span data-w-go="" style="flex:none;display:inline-flex;color:var(--rw-text-muted);padding-top:2px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="arrow-up-right" size="{{ 20 }}" hint-size="20px,20px"></x-import></span>
+        </div>
+      </article>
+    </sc-if>
+    <sc-if value="{{ showMobile }}" hint-placeholder-val="{{ true }}">
+      <article data-work="" data-hover="work" style="display:flex;flex-direction:column;gap:16px;cursor:pointer">
+        <div data-w-img="" style="position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:var(--copper-200)">
+          <div data-w-zoom="" style="position:absolute;inset:0">
+            <image-slot id="realisation-5" shape="rect" placeholder="Capture d’écran du projet"></image-slot>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <h3 style="font:600 17px/1.3 var(--font-sans);margin:0">Application de prise de rendez-vous</h3>
+            <p style="margin:0;font-size:14px;color:var(--rw-text-muted)">Réservation et rappels par notification</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Tag" tone="neutral" hint-size="72px,28px">Android</x-import></div>
+          </div>
+          <span data-w-go="" style="flex:none;display:inline-flex;color:var(--rw-text-muted);padding-top:2px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="arrow-up-right" size="{{ 20 }}" hint-size="20px,20px"></x-import></span>
+        </div>
+      </article>
+    </sc-if>
+    <sc-if value="{{ showWeb }}" hint-placeholder-val="{{ true }}">
+      <article data-work="" data-hover="work" style="display:flex;flex-direction:column;gap:16px;cursor:pointer">
+        <div data-w-img="" style="position:relative;aspect-ratio:4/3;border-radius:10px;overflow:hidden;background:var(--rw-surface-sunken)">
+          <div data-w-zoom="" style="position:absolute;inset:0">
+            <image-slot id="realisation-6" shape="rect" placeholder="Capture d’écran du projet"></image-slot>
+          </div>
+        </div>
+        <div style="display:flex;justify-content:space-between;align-items:flex-start;gap:16px">
+          <div style="display:flex;flex-direction:column;gap:4px">
+            <h3 style="font:600 17px/1.3 var(--font-sans);margin:0">Portfolio de photographe</h3>
+            <p style="margin:0;font-size:14px;color:var(--rw-text-muted)">Galerie, contact et blog</p>
+            <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Tag" tone="neutral" hint-size="72px,28px">Site web</x-import></div>
+          </div>
+          <span data-w-go="" style="flex:none;display:inline-flex;color:var(--rw-text-muted);padding-top:2px"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="arrow-up-right" size="{{ 20 }}" hint-size="20px,20px"></x-import></span>
+        </div>
+      </article>
+    </sc-if>
+  </div>
+</section>
+
+<section id="apropos" data-screen-label="À propos" style="max-width:1200px;margin:0 auto;padding:48px var(--gutter);scroll-margin-top:72px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:56px 80px;align-items:center">
+    <div data-rv="0" style="width:100%;max-width:460px;justify-self:center">
+      <div style="position:relative;padding:0 28px 28px 0">
+        <div data-float="0" aria-hidden="true" style="position:absolute;left:28px;top:28px;right:0;bottom:0;border-radius:32px 0;background:var(--rw-primary)">
+          <span style="position:absolute;right:12px;bottom:12px;width:8px;height:8px;border-radius:50%;background:var(--rw-copper)"></span>
+        </div>
+        <div data-float="1" style="position:relative;aspect-ratio:4/5;border-radius:32px 0;overflow:hidden;background:var(--indigo-100)">
+          <div style="position:absolute;inset:0">
+            <image-slot id="portrait-elios" shape="rect" placeholder="Photo d’Elios Ngombe"></image-slot>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div>
+      <span data-rv="0" style="display:inline-block;font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);margin-bottom:16px">À propos</span>
+      <h2 data-rv="80" style="font:var(--text-h2);letter-spacing:var(--ls-heading);margin:0 0 20px;text-wrap:balance">Derrière Relwick, <span style="color:var(--rw-primary)">Elios Ngombe.</span></h2>
+      <p data-rv="160" style="font-size:var(--fs-lead);line-height:1.5;margin:0 0 16px;max-width:560px;text-wrap:pretty">Développeur professionnel basé à Kolwezi, je conçois et développe moi-même chaque projet : sites web, applications Android et iOS, logiciels PC.</p>
+      <p data-rv="220" style="margin:0 0 32px;max-width:560px;color:var(--rw-text-muted);text-wrap:pretty">Vous échangez directement avec la personne qui écrit le code, du premier appel à la mise en ligne.</p>
+      <dl data-rv="280" style="margin:0 0 32px;max-width:560px;display:grid;grid-template-columns:auto minmax(0,1fr);border-top:1px solid var(--rw-line)">
+        <dt style="padding:14px 32px 14px 0;border-bottom:1px solid var(--rw-line);font-size:14px;color:var(--rw-text-muted)">Basé à</dt>
+        <dd style="margin:0;padding:14px 0;border-bottom:1px solid var(--rw-line);font-weight:500">Kolwezi, RDC</dd>
+        <dt style="padding:14px 32px 14px 0;border-bottom:1px solid var(--rw-line);font-size:14px;color:var(--rw-text-muted)">Métier</dt>
+        <dd style="margin:0;padding:14px 0;border-bottom:1px solid var(--rw-line);font-weight:500">Développeur professionnel</dd>
+        <dt style="padding:14px 32px 14px 0;border-bottom:1px solid var(--rw-line);font-size:14px;color:var(--rw-text-muted)">Plateformes</dt>
+        <dd style="margin:0;padding:14px 0;border-bottom:1px solid var(--rw-line);font-weight:500">Web, Android, iOS, Windows, macOS, Linux</dd>
+      </dl>
+      <div data-rv="340" style="display:flex;flex-wrap:wrap;gap:12px">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" arrow="{{ true }}" href="#contact" hint-size="214px,48px">Réserver un appel</x-import>
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" variant="secondary" icon="mail" href="mailto:elios6546@gmail.com" hint-size="190px,48px">Écrire un e-mail</x-import>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="contact" data-screen-label="Réserver un appel" style="max-width:1200px;margin:0 auto;padding:72px var(--gutter) 96px;scroll-margin-top:72px">
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:48px 64px;align-items:start">
+    <div data-rv="0">
+      <span style="display:inline-block;font:600 12px/1 var(--font-sans);letter-spacing:0.08em;text-transform:uppercase;color:var(--rw-copper-text);margin-bottom:16px">Réserver un appel</span>
+      <h2 style="font:var(--text-h2);letter-spacing:var(--ls-heading);margin:0 0 16px;text-wrap:balance">Parlons de <span style="color:var(--rw-primary)">votre projet.</span></h2>
+      <p style="font-size:var(--fs-lead);line-height:1.5;color:var(--rw-text-muted);margin:0 0 40px;max-width:500px;text-wrap:pretty">Laissez vos coordonnées : nous vous rappelons pour un premier échange de 30 minutes, gratuit et sans engagement.</p>
+      <div style="display:flex;align-items:center;gap:16px;padding:20px 0;border-top:1px solid var(--rw-line);border-bottom:1px solid var(--rw-line);margin-bottom:28px">
+        <span style="flex:none;display:grid;place-items:center;width:56px;height:56px;border-radius:16px 0;background:var(--rw-primary);color:var(--rw-on-primary);font:600 18px/1 var(--font-sans);letter-spacing:-0.01em">EN</span>
+        <div>
+          <div style="font:600 17px/1.3 var(--font-sans)">Elios Ngombe</div>
+          <div style="font-size:14px;color:var(--rw-text-muted);margin-top:2px">Développeur professionnel, votre interlocuteur du premier appel à la mise en ligne</div>
+        </div>
+      </div>
+      <ul style="list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:14px">
+        <li style="display:flex;gap:12px;align-items:center"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="mail" size="{{ 20 }}" style="color:var(--rw-primary)" hint-size="20px,20px"></x-import><a href="mailto:elios6546@gmail.com" style="color:var(--rw-text)" style-hover="color:var(--rw-primary);text-decoration:underline;text-underline-offset:3px">elios6546@gmail.com</a></li>
+        <li style="display:flex;gap:12px;align-items:center"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="phone" size="{{ 20 }}" style="color:var(--rw-primary)" hint-size="20px,20px"></x-import><a href="tel:+243975993035" style="color:var(--rw-text)" style-hover="color:var(--rw-primary);text-decoration:underline;text-underline-offset:3px">+243 975 993 035</a></li>
+        <li style="display:flex;gap:12px;align-items:center"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="message-circle" size="{{ 20 }}" style="color:var(--rw-primary)" hint-size="20px,20px"></x-import><a href="https://wa.me/243975993035?text=Bonjour%20Elios%2C%20je%20souhaite%20parler%20de%20mon%20projet." target="_blank" rel="noopener" style="color:var(--rw-text)" style-hover="color:var(--rw-primary);text-decoration:underline;text-underline-offset:3px">Écrire sur WhatsApp</a></li>
+        <li style="display:flex;gap:12px;align-items:center"><x-import component-from-global-scope="RelwickDesignSystem_7a933f.Icon" name="map-pin" size="{{ 20 }}" style="color:var(--rw-primary)" hint-size="20px,20px"></x-import><span>Kolwezi, République démocratique du Congo</span></li>
+      </ul>
+    </div>
+
+    <form data-rv="140" onSubmit="{{ submit }}" style="background:var(--rw-surface);border:1px solid var(--rw-line);border-radius:10px;padding:clamp(24px,3.4vw,36px);display:flex;flex-direction:column;gap:20px">
+      <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,200px),1fr));gap:20px">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Input" label="Nom complet" placeholder="Ex. Grâce Mukendi" autoComplete="name" value="{{ fNom }}" onChange="{{ onNom }}" error="{{ eNom }}" hint-size="100%,66px"></x-import>
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Input" label="Téléphone ou WhatsApp" type="tel" placeholder="+243 9XX XXX XXX" autoComplete="tel" value="{{ fTel }}" onChange="{{ onTel }}" error="{{ eTel }}" hint-size="100%,66px"></x-import>
+      </div>
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Input" label="Adresse e-mail" hint="Facultatif, pour recevoir une copie de la demande." inputMode="email" autoComplete="email" placeholder="vous@exemple.com" value="{{ fEmail }}" onChange="{{ onEmail }}" error="{{ eEmail }}" hint-size="100%,86px"></x-import>
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Select" label="Type de projet" options="{{ projectOptions }}" value="{{ fProjet }}" onChange="{{ onProjet }}" hint-size="100%,66px"></x-import>
+      <fieldset style="border:0;padding:0;margin:0;display:flex;flex-direction:column;gap:10px">
+        <legend style="font:500 14px/1.3 var(--font-sans);color:var(--rw-text);padding:0;margin-bottom:10px">Moment préféré pour l’appel</legend>
+        <div style="display:flex;flex-wrap:wrap;gap:12px 24px">
+          <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Radio" name="creneau" value="Matin" label="Matin" checked="{{ cMatin }}" onChange="{{ setMatin }}" hint-size="80px,22px"></x-import>
+          <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Radio" name="creneau" value="Après-midi" label="Après-midi" checked="{{ cAprem }}" onChange="{{ setAprem }}" hint-size="110px,22px"></x-import>
+          <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Radio" name="creneau" value="Soir" label="Soir" checked="{{ cSoir }}" onChange="{{ setSoir }}" hint-size="70px,22px"></x-import>
+        </div>
+      </fieldset>
+      <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Input" label="Votre projet en quelques lignes" multiline="{{ true }}" rows="{{ 4 }}" placeholder="Ex. Je voudrais une application pour gérer les commandes de ma boutique." value="{{ fMessage }}" onChange="{{ onMessage }}" hint-size="100%,130px"></x-import>
+      <div style="display:flex;flex-direction:column;gap:6px">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Checkbox" label="J’accepte d’être recontacté au sujet de ma demande." checked="{{ fConsent }}" onChange="{{ onConsent }}" hint-size="100%,22px"></x-import>
+        <sc-if value="{{ eConsent }}" hint-placeholder-val="{{ false }}"><span style="font:400 13px/1.4 var(--font-sans);color:var(--rw-danger);padding-left:28px">{{ eConsent }}</span></sc-if>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:12px 20px;padding-top:4px">
+        <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" type="submit" size="lg" arrow="{{ true }}" hint-size="190px,48px">Réserver l’appel</x-import>
+        <span style="font-size:14px;color:var(--rw-text-muted)">Appel gratuit, sans engagement.</span>
+      </div>
+    </form>
+  </div>
+</section>
+
+<footer data-theme="dark" data-screen-label="Footer" style="background:var(--rw-bg);color:var(--rw-text);padding:72px 0 32px">
+  <div style="max-width:1200px;margin:0 auto;padding:0 var(--gutter)">
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:48px;padding-bottom:48px;border-bottom:1px solid var(--rw-line)">
+      <div style="max-width:360px">
+        <img src="assets/relwick-logo-on-dark.svg" alt="relwick" style="height:32px;display:block">
+        <p style="margin:16px 0 0;color:var(--rw-text-muted);text-wrap:pretty">Agence de création de sites web et d’applications Android, iOS et PC, basée à Kolwezi.</p>
+      </div>
+      <div style="display:flex;flex-wrap:wrap;gap:64px">
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <h4 style="font:600 13px var(--font-sans);margin:0 0 4px">Services</h4>
+          <a href="#services" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">Sites web</a>
+          <a href="#services" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">Applications Android</a>
+          <a href="#services" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">Applications iOS</a>
+          <a href="#services" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">Logiciels PC</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <h4 style="font:600 13px var(--font-sans);margin:0 0 4px">Agence</h4>
+          <a href="#realisations" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">Réalisations</a>
+          <a href="#apropos" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">À propos</a>
+          <a href="#contact" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">Réserver un appel</a>
+        </div>
+        <div style="display:flex;flex-direction:column;gap:10px">
+          <h4 style="font:600 13px var(--font-sans);margin:0 0 4px">Contact</h4>
+          <a href="mailto:elios6546@gmail.com" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">elios6546@gmail.com</a>
+          <a href="tel:+243975993035" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">+243 975 993 035</a>
+          <a href="https://wa.me/243975993035" target="_blank" rel="noopener" style="color:var(--rw-text-muted);font-size:15px" style-hover="color:var(--rw-text)">WhatsApp</a>
+          <span style="color:var(--rw-text-muted);font-size:15px">Kolwezi, RDC</span>
+        </div>
+      </div>
+    </div>
+    <div style="display:flex;flex-wrap:wrap;justify-content:space-between;gap:12px;padding-top:24px;font-size:14px;color:var(--rw-text-muted)">
+      <span>© 2026 Relwick</span>
+      <span>Kolwezi, République démocratique du Congo</span>
+    </div>
+  </div>
+</footer>
+
+<x-import component-from-global-scope="RelwickDesignSystem_7a933f.Dialog" open="{{ confirmOpen }}" title="Confirmer votre demande ?" onClose="{{ closeConfirm }}" actions="{{ dialogActions }}" hint-size="0px,0px">{{ dialogText }}</x-import>
+
+<div data-fab="" style="position:fixed;right:clamp(16px,3vw,24px);bottom:clamp(16px,3vw,24px);z-index:110;border-radius:6px;box-shadow:var(--shadow-3)">
+  <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Button" size="lg" icon="message-circle" href="https://wa.me/243975993035?text=Bonjour%20Elios%2C%20je%20souhaite%20parler%20de%20mon%20projet." target="_blank" rel="noopener" aria-label="Contacter Relwick sur WhatsApp" hint-size="150px,48px">WhatsApp</x-import>
+</div>
+
+<sc-if value="{{ sent }}" hint-placeholder-val="{{ false }}">
+  <div style="position:fixed;right:24px;bottom:88px;left:24px;z-index:120;display:flex;justify-content:flex-end;pointer-events:none">
+    <x-import component-from-global-scope="RelwickDesignSystem_7a933f.Toast" tone="success" title="Demande envoyée" description="Elios Ngombe vous rappelle sous 48 h au numéro indiqué." hint-size="320px,64px"></x-import>
+  </div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;heroVariant&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;panneau&quot;,&quot;plein-cadre&quot;,&quot;feuille&quot;],&quot;default&quot;:&quot;panneau&quot;,&quot;tsType&quot;:&quot;'panneau'|'plein-cadre'|'feuille'&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;heroPanelStyle&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;verre&quot;,&quot;sans-fond&quot;],&quot;default&quot;:&quot;verre&quot;,&quot;tsType&quot;:&quot;'verre'|'sans-fond'&quot;,&quot;section&quot;:&quot;Hero&quot;},&quot;showSecondaryCta&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:true,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Hero&quot;}}">
+const EMPTY = { nom: '', tel: '', email: '', projet: 'Site web', creneau: 'Matin', message: '', consent: true };
+const MOMENTS = { 'Matin': 'le matin', 'Après-midi': 'l’après-midi', 'Soir': 'le soir' };
+const EASE = 'cubic-bezier(.16,1,.3,1)', SPRING = 'cubic-bezier(.34,1.4,.64,1)', INOUT = 'cubic-bezier(.65,0,.35,1)';
+const TABS = [{ value: 'all', label: 'Tout' }, { value: 'web', label: 'Sites web' }, { value: 'mobile', label: 'Applications' }, { value: 'pc', label: 'Logiciels PC' }];
+
+class Component extends DCLogic {
+  state = { theme: 'light', scrolled: false, narrow: false, menuOpen: false, form: { ...EMPTY }, errors: {}, confirmOpen: false, sent: false, cat: 'all', tabsKey: 0 };
+
+  setField = (k) => (e) => {
+    const t = e && e.target;
+    const v = t ? (t.type === 'checkbox' ? t.checked : t.value) : e;
+    this.setState(s => ({ form: { ...s.form, [k]: v }, errors: { ...s.errors, [k]: undefined } }));
+  };
+  h = {
+    nom: this.setField('nom'), tel: this.setField('tel'), email: this.setField('email'),
+    projet: this.setField('projet'), message: this.setField('message'), consent: this.setField('consent'),
+    matin: () => this.setField('creneau')('Matin'), aprem: () => this.setField('creneau')('Après-midi'), soir: () => this.setField('creneau')('Soir'),
+  };
+
+  componentDidMount() {
+    this.reduced = !Element.prototype.animate || !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+    this.seen = new WeakSet(); this.floated = new WeakSet(); this.pending = new Map();
+    this.io = 'IntersectionObserver' in window ? new IntersectionObserver(es => es.forEach(e => {
+      if (!e.isIntersecting) return;
+      const a = this.pending.get(e.target);
+      if (a) { a.play(); this.pending.delete(e.target); }
+      this.io.unobserve(e.target);
+    }), { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }) : null;
+    this.onScroll = () => {
+      const s = window.scrollY > 8; if (s !== this.state.scrolled) this.setState({ scrolled: s });
+      if (!this.reduced && !this.raf) this.raf = requestAnimationFrame(() => { this.raf = 0; this.parallax(); });
+    };
+    this.onResize = () => { const n = window.innerWidth < 820; if (n !== this.state.narrow) this.setState({ narrow: n, menuOpen: false }); };
+    this.onOver = e => this.hoverEvt(e, true);
+    this.onOut = e => this.hoverEvt(e, false);
+    window.addEventListener('scroll', this.onScroll, { passive: true });
+    window.addEventListener('resize', this.onResize);
+    document.addEventListener('mouseover', this.onOver);
+    document.addEventListener('mouseout', this.onOut);
+    this.onScroll(); this.onResize();
+    let t = null;
+    try { t = localStorage.getItem('relwick-theme'); } catch (e) {}
+    if (t === 'dark' || t === 'light') this.setState({ theme: t });
+    this.syncTheme();
+    this.lastV = this.props.heroVariant ?? 'panneau'; this.lastCat = this.state.cat; this.lastMenu = false;
+    requestAnimationFrame(() => { this.heroIntro(); this.setupReveal(); this.setupFloat(); });
+    this.remeasure = () => setTimeout(() => this.setState(s => ({ tabsKey: s.tabsKey + 1 })), 60);
+    if (document.fonts && document.fonts.ready) document.fonts.ready.then(this.remeasure);
+    if (document.readyState === 'complete') this.remeasure(); else window.addEventListener('load', this.remeasure, { once: true });
+    this.remeasureT = setTimeout(this.remeasure, 1200);
+  }
+  componentDidUpdate() {
+    this.syncTheme();
+    const v = this.props.heroVariant ?? 'panneau';
+    if (v !== this.lastV) { this.lastV = v; requestAnimationFrame(() => { this.heroIntro(); this.parallax(); }); }
+    if (this.state.cat !== this.lastCat) { this.lastCat = this.state.cat; requestAnimationFrame(() => this.animateWorks()); }
+    if (this.state.menuOpen && !this.lastMenu) requestAnimationFrame(() => this.animateMenu());
+    this.lastMenu = this.state.menuOpen;
+    this.setupReveal(); this.setupFloat();
+  }
+  componentWillUnmount() {
+    window.removeEventListener('scroll', this.onScroll);
+    window.removeEventListener('resize', this.onResize);
+    document.removeEventListener('mouseover', this.onOver);
+    document.removeEventListener('mouseout', this.onOut);
+    if (this.io) this.io.disconnect();
+    cancelAnimationFrame(this.raf);
+    clearTimeout(this.toastT);
+    clearTimeout(this.remeasureT);
+  }
+
+  heroIntro() {
+    const hero = document.getElementById('accueil');
+    if (!hero || this.reduced) return;
+    hero.querySelectorAll('[data-word]').forEach((w, i) => {
+      const m = w.parentElement; if (m) m.style.overflow = 'hidden';
+      const a = w.animate([{ transform: 'translateY(110%)' }, { transform: 'none' }], { duration: 1000, easing: EASE, delay: 160 + i * 90, fill: 'backwards' });
+      a.onfinish = () => { if (m) m.style.overflow = 'visible'; };
+    });
+    hero.querySelectorAll('[data-hero-fade]').forEach(el => el.animate(
+      [{ opacity: 0, transform: 'translateY(20px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 900, easing: EASE, delay: +el.getAttribute('data-hero-fade') || 0, fill: 'backwards' }));
+    hero.querySelectorAll('[data-hero-glass]').forEach(el => el.animate(
+      [{ opacity: 0, transform: 'translateY(32px) scale(.98)' }, { opacity: 1, transform: 'none' }],
+      { duration: 1100, easing: EASE, fill: 'backwards' }));
+    const fab = document.querySelector('[data-fab]');
+    if (fab && !this.fabDone) { this.fabDone = true; fab.animate([{ opacity: 0, transform: 'translateY(16px) scale(.94)' }, { opacity: 1, transform: 'none' }], { duration: 700, easing: SPRING, delay: 1300, fill: 'backwards' }); }
+    hero.querySelectorAll('[data-kb]').forEach(el => el.animate([{ scale: '1.1' }, { scale: '1' }], { duration: 2400, easing: EASE, fill: 'backwards' }));
+  }
+  setupReveal() {
+    if (this.reduced || !this.io) return;
+    document.querySelectorAll('[data-rv]').forEach(el => {
+      if (this.seen.has(el)) return;
+      this.seen.add(el);
+      const a = el.animate([{ opacity: 0, transform: 'translateY(28px)' }, { opacity: 1, transform: 'none' }],
+        { duration: 900, easing: EASE, delay: +el.getAttribute('data-rv') || 0, fill: 'backwards' });
+      a.pause();
+      this.pending.set(el, a);
+      this.io.observe(el);
+    });
+  }
+  setupFloat() {
+    if (this.reduced) return;
+    document.querySelectorAll('[data-float]').forEach(el => {
+      if (this.floated.has(el)) return;
+      this.floated.add(el);
+      const front = el.getAttribute('data-float') === '1';
+      el.animate([{ translate: '0 0' }, { translate: '0 ' + (front ? -14 : -8) + 'px' }],
+        { duration: front ? 6400 : 8200, easing: INOUT, direction: 'alternate', iterations: Infinity, delay: front ? 0 : 700 });
+    });
+  }
+  parallax() {
+    const img = document.querySelector('#accueil [data-parallax]');
+    if (!img) return;
+    const y = Math.max(0, Math.min(window.scrollY, 1000));
+    img.style.translate = '0 ' + (y * 0.3).toFixed(1) + 'px';
+  }
+  animateWorks() {
+    if (this.reduced) return;
+    document.querySelectorAll('[data-work]').forEach((el, i) => el.animate(
+      [{ opacity: 0, transform: 'translateY(16px) scale(.98)' }, { opacity: 1, transform: 'none' }],
+      { duration: 560, easing: EASE, delay: i * 70, fill: 'backwards' }));
+  }
+  animateMenu() {
+    const n = document.querySelector('[data-mnav]');
+    if (!n || this.reduced) return;
+    n.animate([{ opacity: 0, transform: 'translateY(-8px)' }, { opacity: 1, transform: 'none' }], { duration: 280, easing: EASE });
+    Array.from(n.children).forEach((c, i) => c.animate([{ opacity: 0, transform: 'translateY(-6px)' }, { opacity: 1, transform: 'none' }],
+      { duration: 420, easing: EASE, delay: 40 + i * 45, fill: 'backwards' }));
+  }
+  hoverEvt(e, on) {
+    const t = e.target;
+    if (!t || !t.closest) return;
+    const c = t.closest('[data-hover]');
+    if (!c) return;
+    const r = e.relatedTarget;
+    if (r && c.contains(r)) return;
+    this.hover(c, on);
+  }
+  hover(c, on) {
+    if (this.reduced) return;
+    const k = c.getAttribute('data-hover');
+    if (k === 'svc') {
+      this.tween(c.querySelector('[data-ic]'), 'transform', on ? 'rotate(-8deg) scale(1.08)' : 'none', on ? SPRING : EASE);
+    } else if (k === 'work') {
+      const cs = getComputedStyle(c);
+      this.tween(c.querySelector('[data-w-img]'), 'borderRadius', on ? '32px 0px' : '10px');
+      this.tween(c.querySelector('[data-w-zoom]'), 'scale', on ? '1.05' : '1');
+      const go = c.querySelector('[data-w-go]');
+      this.tween(go, 'translate', on ? '3px -3px' : '0px 0px');
+      this.tween(go, 'color', cs.getPropertyValue(on ? '--rw-primary' : '--rw-text-muted').trim());
+    }
+  }
+  tween(el, prop, to, easing) {
+    if (!el || !to) return;
+    const from = getComputedStyle(el)[prop];
+    el.getAnimations().forEach(a => { if (a.__p === prop) a.cancel(); });
+    const a = el.animate([{ [prop]: from }, { [prop]: to }], { duration: 560, easing: easing || EASE, fill: 'forwards' });
+    a.__p = prop;
+  }
+  setCat = (v) => this.setState({ cat: typeof v === 'string' ? v : 'all' });
+  syncTheme() { document.documentElement.setAttribute('data-theme', this.state.theme); }
+
+  toggleTheme = () => {
+    const theme = this.state.theme === 'dark' ? 'light' : 'dark';
+    try { localStorage.setItem('relwick-theme', theme); } catch (e) {}
+    this.setState({ theme });
+  };
+  toggleMenu = () => this.setState(s => ({ menuOpen: !s.menuOpen }));
+  closeMenu = () => this.setState({ menuOpen: false });
+
+  submit = (e) => {
+    if (e && e.preventDefault) e.preventDefault();
+    const f = this.state.form, er = {};
+    if (f.nom.trim().length < 2) er.nom = 'Indiquez votre nom.';
+    const digits = f.tel.replace(/\D/g, '');
+    if (!digits) er.tel = 'Indiquez un numéro pour que nous puissions vous rappeler.';
+    else if (digits.length < 9) er.tel = 'Numéro incomplet, par exemple +243 975 993 035.';
+    if (f.email.trim() && !/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(f.email.trim())) er.email = 'Adresse e-mail incomplète.';
+    if (!f.consent) er.consent = 'Cochez cette case pour que nous puissions vous rappeler.';
+    this.setState({ errors: er, confirmOpen: Object.keys(er).length === 0 });
+  };
+  closeConfirm = () => this.setState({ confirmOpen: false });
+  confirm = () => {
+    clearTimeout(this.toastT);
+    this.setState({ confirmOpen: false, sent: true, form: { ...EMPTY }, errors: {} });
+    this.toastT = setTimeout(() => this.setState({ sent: false }), 5000);
+  };
+
+  renderVals() {
+    const { theme, scrolled, narrow, menuOpen, form: f, errors: er } = this.state;
+    const v = this.props.heroVariant ?? 'panneau';
+    const solid = !scrolled || (narrow && menuOpen);
+    const DS = window.RelwickDesignSystem_7a933f;
+    const ce = React.createElement;
+    const dialogActions = DS && DS.Button
+      ? ce(React.Fragment, null,
+          ce(DS.Button, { variant: 'ghost', onClick: this.closeConfirm }, 'Modifier'),
+          ce(DS.Button, { onClick: this.confirm, arrow: true }, 'Confirmer'))
+      : null;
+    const dialogText = 'Elios Ngombe vous rappellera au ' + (f.tel.trim() || '—') + ', de préférence ' + (MOMENTS[f.creneau] || 'le matin')
+      + ', pour parler de votre projet (' + f.projet.toLowerCase() + ').' + (f.email.trim() ? ' Une copie de la demande sera envoyée à ' + f.email.trim() + '.' : '');
+    return {
+      theme, isLight: theme !== 'dark', isDark: theme === 'dark', themeIcon: theme === 'dark' ? 'sun' : 'moon', toggleTheme: this.toggleTheme,
+      hdBg: solid ? 'var(--rw-bg)' : 'color-mix(in srgb, var(--rw-bg) 82%, transparent)',
+      hdBlur: solid ? 'none' : 'blur(14px)',
+      hdShadow: scrolled || (narrow && menuOpen) ? '0 1px 0 var(--rw-line)' : 'none',
+      wide: !narrow, narrow, showMobileMenu: narrow && menuOpen, menuIcon: menuOpen ? 'x' : 'menu',
+      toggleMenu: this.toggleMenu, closeMenu: this.closeMenu,
+      heroPanel: v === 'panneau', heroGlass: (this.props.heroPanelStyle ?? 'verre') === 'verre', heroFull: v === 'plein-cadre', heroLeaf: v === 'feuille',
+      showSecondary: this.props.showSecondaryCta ?? true,
+      fNom: f.nom, fTel: f.tel, fEmail: f.email, fProjet: f.projet, fMessage: f.message, fConsent: f.consent,
+      eNom: er.nom, eTel: er.tel, eEmail: er.email, eConsent: er.consent,
+      onNom: this.h.nom, onTel: this.h.tel, onEmail: this.h.email, onProjet: this.h.projet, onMessage: this.h.message, onConsent: this.h.consent,
+      projectOptions: ['Site web', 'Application Android', 'Application iOS', 'Application Android et iOS', 'Logiciel PC', 'Je ne sais pas encore'],
+      cMatin: f.creneau === 'Matin', cAprem: f.creneau === 'Après-midi', cSoir: f.creneau === 'Soir',
+      setMatin: this.h.matin, setAprem: this.h.aprem, setSoir: this.h.soir,
+      submit: this.submit, confirmOpen: this.state.confirmOpen, closeConfirm: this.closeConfirm,
+      dialogText, dialogActions, sent: this.state.sent,
+      cat: this.state.cat, tabItems: TABS, setCat: this.setCat, tabsKey: 'tabs-' + this.state.tabsKey,
+      showWeb: this.state.cat === 'all' || this.state.cat === 'web',
+      showMobile: this.state.cat === 'all' || this.state.cat === 'mobile',
+      showPc: this.state.cat === 'all' || this.state.cat === 'pc',
+    };
+  }
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,132 @@
+/* Relwick v2 — thème web (Next.js + Tailwind CSS v4)
+   1. Polices : next/font/google → Instrument_Sans (400–700) et JetBrains_Mono (400–500)
+      en exposant les variables --font-instrument et --font-jetbrains.
+   2. Importer ce fichier après "tailwindcss" dans app/globals.css.
+   3. Thème sombre : data-theme="dark" sur <html>. */
+
+:root, [data-theme="light"] {
+  --rw-bg: #F9F6F1;
+  --rw-surface: #FFFFFF;
+  --rw-surface-sunken: #F1ECE4;
+  --rw-line: #E6E0D7;
+  --rw-line-strong: #8F8A80;
+  --rw-text: #0D111E;
+  --rw-text-muted: #535766;
+  --rw-primary: #483EFE;
+  --rw-primary-hover: #3A30D3;
+  --rw-on-primary: #FFFFFF;
+  --rw-link: #483EFE;
+  --rw-primary-soft: #E3E6FF;
+  --rw-primary-soft-text: #3A30D3;
+  --rw-copper: #C6782E;
+  --rw-copper-text: #894C06;
+  --rw-copper-soft: #F8E8DB;
+  --rw-success: #00654B;
+  --rw-success-soft: #D3F0E3;
+  --rw-warning: #816002;
+  --rw-warning-soft: #FBE9C6;
+  --rw-danger: #C9222B;
+  --rw-danger-soft: #FDE9E7;
+  --rw-focus: #483EFE;
+  --rw-logo-indigo: #483EFE;
+  --rw-logo-copper: #C6782E;
+}
+[data-theme="dark"] {
+  --rw-bg: #0D111E;
+  --rw-surface: #151926;
+  --rw-surface-sunken: #080A16;
+  --rw-line: #262B3A;
+  --rw-line-strong: #707482;
+  --rw-text: #F9F6F1;
+  --rw-text-muted: #9498A5;
+  --rw-primary: #5250FE;
+  --rw-primary-hover: #483EFE;
+  --rw-on-primary: #FFFFFF;
+  --rw-link: #8D90FF;
+  --rw-primary-soft: #1E1B6C;
+  --rw-primary-soft-text: #ADB3FF;
+  --rw-copper: #DC9659;
+  --rw-copper-text: #EAB489;
+  --rw-copper-soft: #2E1602;
+  --rw-success: #46B591;
+  --rw-success-soft: #003525;
+  --rw-warning: #E0AB22;
+  --rw-warning-soft: #493400;
+  --rw-danger: #F2716A;
+  --rw-danger-soft: #590A0E;
+  --rw-focus: #8D90FF;
+  --rw-logo-indigo: #6E6AFF;
+  --rw-logo-copper: #DC9659;
+}
+
+@theme {
+  --font-sans: var(--font-instrument), "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-jetbrains), "JetBrains Mono", ui-monospace, monospace;
+  --color-bg: var(--rw-bg);
+  --color-surface: var(--rw-surface);
+  --color-surface-sunken: var(--rw-surface-sunken);
+  --color-line: var(--rw-line);
+  --color-line-strong: var(--rw-line-strong);
+  --color-text: var(--rw-text);
+  --color-text-muted: var(--rw-text-muted);
+  --color-primary: var(--rw-primary);
+  --color-primary-hover: var(--rw-primary-hover);
+  --color-on-primary: var(--rw-on-primary);
+  --color-link: var(--rw-link);
+  --color-primary-soft: var(--rw-primary-soft);
+  --color-primary-soft-text: var(--rw-primary-soft-text);
+  --color-copper: var(--rw-copper);
+  --color-copper-text: var(--rw-copper-text);
+  --color-copper-soft: var(--rw-copper-soft);
+  --color-success: var(--rw-success);
+  --color-success-soft: var(--rw-success-soft);
+  --color-warning: var(--rw-warning);
+  --color-warning-soft: var(--rw-warning-soft);
+  --color-danger: var(--rw-danger);
+  --color-danger-soft: var(--rw-danger-soft);
+  --color-focus: var(--rw-focus);
+  --color-logo-indigo: var(--rw-logo-indigo);
+  --color-logo-copper: var(--rw-logo-copper);
+  --color-indigo-50: #F3F4FF;
+  --color-indigo-100: #E3E6FF;
+  --color-indigo-200: #CBD0FE;
+  --color-indigo-300: #ADB3FF;
+  --color-indigo-400: #8D90FF;
+  --color-indigo-500: #6E6AFF;
+  --color-indigo-600: #483EFE;
+  --color-indigo-700: #3A30D3;
+  --color-indigo-800: #2C259E;
+  --color-indigo-900: #1E1B6C;
+  --color-indigo-950: #110E42;
+  --color-copper-50: #FCF3ED;
+  --color-copper-100: #F8E8DB;
+  --color-copper-200: #F1D0B7;
+  --color-copper-300: #EAB489;
+  --color-copper-400: #DC9659;
+  --color-copper-500: #C6782E;
+  --color-copper-600: #A86012;
+  --color-copper-700: #894C06;
+  --color-copper-800: #6A3A06;
+  --color-copper-900: #4C2905;
+  --color-copper-950: #2E1602;
+  --color-ink-50: #F5F7FB;
+  --color-ink-100: #E9EBF1;
+  --color-ink-200: #D6D9E1;
+  --color-ink-300: #BABDC8;
+  --color-ink-400: #9498A5;
+  --color-ink-500: #707482;
+  --color-ink-600: #535766;
+  --color-ink-700: #3B3F4E;
+  --color-ink-800: #262B3A;
+  --color-ink-900: #151926;
+  --color-ink-950: #0D111E;
+  --color-ink-975: #080A16;
+  --color-ivory: #F9F6F1;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 16px;
+  --radius-leaf: 32px;
+}
+
+/* Forme feuille (visuels de marque uniquement) */
+.rw-leaf { border-radius: var(--radius-leaf) 0; }
